@@ -2,7 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AuditController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\RoleController;
 
 
@@ -38,5 +41,37 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
+    Route::resource('managers', ManagerController::class);
     Route::resource('products', ProductController::class);
+
+    /*
+	|--------------------------------------------------------------------------
+	| Audit Routes
+	|--------------------------------------------------------------------------
+	*/
+	Route::controller(AuditController::class)->prefix('audits')->group(function () {
+		Route::get('index', 		 'index')->name('audit.index');
+		Route::get('show/{id}', 	 'show')->name('audit.show');
+		Route::delete('destroy/{id}','destroy')->name('audit.destroy');
+	});
+
+	/*
+	|--------------------------------------------------------------------------
+	| Settings Routes
+	|--------------------------------------------------------------------------
+	*/
+	Route::controller(SettingController::class)->prefix('settings')->group(function () {
+		Route::get('index', 	'index'	)->name('settings.index');
+		Route::post('save', 	'save'	)->name('settings.save');
+	});
+
+	/*
+	|--------------------------------------------------------------------------
+	| Error Log Route
+	|--------------------------------------------------------------------------
+	*/
+	Route::get('logs', 
+		[\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']
+	)->name('logs');
+
 });

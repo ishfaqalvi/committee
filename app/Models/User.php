@@ -14,7 +14,12 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    protected array $guard_name = ['api', 'web'];
+    static $rules = [
+        'name'      => 'required',
+        'email'     => 'required|email|unique:users,email',
+        'password'  => 'required|same:confirm-password',
+        'roles'     => 'required'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -24,8 +29,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'phone_number',
+        'password',
+        'mobile_number',
         'image',
+        'type',
         'status'
     ];
 

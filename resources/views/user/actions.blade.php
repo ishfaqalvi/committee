@@ -4,13 +4,13 @@
             <i class="ph-list"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-end">
-            <form action="{{ route('roles.destroy',$role->id) }}" method="POST">
+            <form action="{{ route('users.destroy',$user->id) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <a href="{{ route('roles.show',$role->id) }}" class="dropdown-item">
+                <a href="{{ route('users.show',$user->id) }}" class="dropdown-item">
                     <i class="ph-eye me-2"></i>{{ __('Show') }}
                 </a>
-                <a href="{{ route('roles.edit',$role->id) }}" class="dropdown-item">
+                <a href="{{ route('users.edit',$user->id) }}" class="dropdown-item">
                     <i class="ph-note-pencil me-2"></i>{{ __('Edit') }}
                 </a>
                 <button type="submit" class="dropdown-item sa-confirm">
