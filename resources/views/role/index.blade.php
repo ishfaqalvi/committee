@@ -16,7 +16,7 @@
     </div>
     <div class="collapse d-lg-block my-lg-auto ms-lg-auto" id="page_header">
         <div class="d-sm-flex align-items-center mb-3 mb-lg-0 ms-lg-3">
-            <a href="{{ route(':roles.create') }}" class="btn btn-outline-primary btn-labeled btn-labeled-start rounded-pill">
+            <a href="{{ route('roles.create') }}" class="btn btn-outline-primary btn-labeled btn-labeled-start rounded-pill">
                 <span class="btn-labeled-icon bg-primary text-white rounded-pill">
                     <i class="ph-plus"></i>
                 </span>
@@ -37,58 +37,22 @@
             <thead class="thead">
                 <tr>
                     <th>No</th>
-                    
-										<th>Name</th>
-										<th>Guard Name</th>
-
-                    <th></th>
+                    <th>Name</th>
+                    <th>Guard</th>
+                    <th class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($roles as $role)
+                @foreach ($roles as $key => $role)
                     <tr>
-                        <td>{{ ++$i }}</td>
-                        
-											<td>{{ $role->name }}</td>
-											<td>{{ $role->guard_name }}</td>
-
-                        <td class="text-center">
-                            <div class="d-inline-flex">
-                                <div class="dropdown">
-                                    <a href="#" class="text-body" data-bs-toggle="dropdown">
-                                        <i class="ph-list"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a href="#" class="dropdown-item">
-                                            <i class="ph-file-pdf me-2"></i>
-                                            Export to .pdf
-                                        </a>
-                                        <a href="#" class="dropdown-item">
-                                            <i class="ph-file-xls me-2"></i>
-                                            Export to .csv
-                                        </a>
-                                        <a href="#" class="dropdown-item">
-                                            <i class="ph-file-doc me-2"></i>
-                                            Export to .doc
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <form action="{{ route(':roles.destroy',$role->id) }}" method="POST">
-                                <a class="btn btn-sm btn-primary " href="{{ route(':roles.show',$role->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
-                                <a class="btn btn-sm btn-success" href="{{ route(':roles.edit',$role->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
-                            </form>
-                        </td>
+                        <td>{{ ++$key }}</td>
+                        <td>{{ $role->name }}</td>
+                        <td>{{ ucfirst($role->guard_name) }}</td>
+                        <td class="text-center">@include('role.actions')</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-        {!! $roles->links() !!}
     </div>
 </div>
 @endsection

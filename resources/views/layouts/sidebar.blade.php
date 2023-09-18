@@ -24,6 +24,12 @@
                     <span>Dashboard</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('roles.index') }}" class="nav-link">
+                    <i class="ph-atom"></i>
+                    <span>Role</span>
+                </a>
+            </li>
             <li class="nav-item nav-item-submenu">
                 <a href="#" class="nav-link">
                     <i class="ph-layout"></i>

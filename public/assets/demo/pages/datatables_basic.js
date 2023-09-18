@@ -29,8 +29,8 @@ const DatatableBasic = function() {
             autoWidth: false,
             columnDefs: [{ 
                 orderable: false,
-                width: 100,
-                targets: [ 5 ]
+                // width: 100,
+                targets: [ -1 ]
             }],
             dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
             language: {

@@ -18,10 +18,9 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::paginate();
+        $roles = Role::get();
 
-        return view('role.index', compact('roles'))
-            ->with('i', (request()->input('page', 1) - 1) * $roles->perPage());
+        return view('role.index', compact('roles'));
     }
 
     /**
@@ -47,7 +46,7 @@ class RoleController extends Controller
 
         $role = Role::create($request->all());
 
-        return redirect()->route(':roles.index')
+        return redirect()->route('roles.index')
             ->with('success', 'Role created successfully.');
     }
 
@@ -90,7 +89,7 @@ class RoleController extends Controller
 
         $role->update($request->all());
 
-        return redirect()->route(':roles.index')
+        return redirect()->route('roles.index')
             ->with('success', 'Role updated successfully');
     }
 
@@ -103,7 +102,7 @@ class RoleController extends Controller
     {
         $role = Role::find($id)->delete();
 
-        return redirect()->route(':roles.index')
+        return redirect()->route('roles.index')
             ->with('success', 'Role deleted successfully');
     }
 }
