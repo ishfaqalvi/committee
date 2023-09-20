@@ -21,6 +21,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->string('image')->default('upload/images/profile/avatar.jpg');
             $table->enum('type',['Admin','Manager','Member']);
+            $table->integer('created_by')->nullable();
             $table->timestamps();
         });
     }

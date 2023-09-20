@@ -47,7 +47,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('logs') }}" class="nav-link">
+                <a href="{{ route('members.index') }}" class="nav-link">
+                    <i class="ph-user-list"></i>
+                    <span>Members</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('committees.index') }}" class="nav-link">
                     <i class="ph-headlights"></i>
                     <span>Coommitte</span>
                 </a>

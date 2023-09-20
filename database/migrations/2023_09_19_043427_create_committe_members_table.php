@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('committees', function (Blueprint $table) {
+        Schema::create('committe_members', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->enum('type',['Weekly','Monthly']);
-            $table->integer('amount');
-            $table->string('status')->default('UnPublish');
+            $table->foreignId('committe_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->integer('order');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('committees');
+        Schema::dropIfExists('committe_members');
     }
 };

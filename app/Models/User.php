@@ -33,6 +33,7 @@ class User extends Authenticatable
         'mobile_number',
         'image',
         'type',
+        'created_by',
         'status'
     ];
 
@@ -88,5 +89,13 @@ class User extends Authenticatable
     public function getImageAttribute($image)
     {
         return asset($image);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'id', 'created_by');
     }
 }

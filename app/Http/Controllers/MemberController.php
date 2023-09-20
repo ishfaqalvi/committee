@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use App\Models\User;
 
-class ManagerController extends Controller
+class MemberController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +14,9 @@ class ManagerController extends Controller
      */
     public function index()
     {
-        $users = User::where('type','Manager')->get();
+        $users = User::where('type','Member')->get();
 
-        return view('manager.index', compact('users'));
+        return view('member.index', compact('users'));
     }
 
     /**
@@ -27,10 +26,10 @@ class ManagerController extends Controller
      */
     public function create()
     {
-        $manager = new User();
+        $member = new User();
         $roles = Role::pluck('name','id');
 
-        return view('manager.create', compact('manager','roles'));
+        return view('member.create', compact('member','roles'));
     }
 
     /**
@@ -44,8 +43,8 @@ class ManagerController extends Controller
         $user = User::create($request->all());
         $user->assignRole($request->input('roles'));
 
-        return redirect()->route('managers.index')
-            ->with('success', 'Manager created successfully.');
+        return redirect()->route('members.index')
+            ->with('success', 'Member created successfully.');
     }
 
     /**
@@ -56,9 +55,9 @@ class ManagerController extends Controller
      */
     public function show($id)
     {
-        $manager = User::find($id);
+        $member = User::find($id);
 
-        return view('manager.show', compact('manager'));
+        return view('member.show', compact('member'));
     }
 
     /**
@@ -69,29 +68,29 @@ class ManagerController extends Controller
      */
     public function edit($id)
     {
-        $manager = User::find($id);
+        $member = User::find($id);
         $roles = Role::pluck('name','id');
 
-        return view('manager.edit', compact('manager','roles'));
+        return view('member.edit', compact('member','roles'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  User $manager
+     * @param  User $member
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $manager)
+    public function update(Request $request, User $member)
     {
         $input = $request->all();
         if(empty($input['password'])){
             $input = Arr::except($input,array('password'));    
         }
-        $manager->update($input);
+        $member->update($input);
 
-        return redirect()->route('managers.index')
-            ->with('success', 'Manager updated successfully');
+        return redirect()->route('members.index')
+            ->with('success', 'Member updated successfully');
     }
 
     /**
@@ -103,7 +102,7 @@ class ManagerController extends Controller
     {
         $user = User::find($id)->delete();
 
-        return redirect()->route('managers.index')
-            ->with('success', 'Manager deleted successfully');
+        return redirect()->route('members.index')
+            ->with('success', 'Member deleted successfully');
     }
 }
