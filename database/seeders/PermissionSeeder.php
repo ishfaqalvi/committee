@@ -28,6 +28,18 @@ class PermissionSeeder extends Seeder
                   'users-edit', 
                   'users-delete',
 
+                  'committees-list', 
+                  'committees-view', 
+                  'committees-create', 
+                  'committees-edit', 
+                  'committees-delete',
+
+                  'committeeTypes-list', 
+                  'committeeTypes-view', 
+                  'committeeTypes-create', 
+                  'committeeTypes-edit', 
+                  'committeeTypes-delete',
+
                   'notifications-list', 
                   'notifications-view', 
                   'notifications-create', 

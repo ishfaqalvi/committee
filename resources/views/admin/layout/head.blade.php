@@ -25,6 +25,8 @@
 <script src="{{ asset('assets/js/vendor/forms/selects/bootstrap_multiselect.js') }}"></script>
 <script src="{{ asset('assets/js/vendor/uploaders/dropzone.min.js') }}"></script>
 <script src="{{ asset('assets/demo/dropify/js/dropify.js') }}"></script>
+<script src="{{ asset('assets/js/vendor/pickers/daterangepicker.js') }}"></script>
+<script src="{{ asset('assets/js/vendor/pickers/datepicker.min.js') }}"></script>
 <!-- <script src="{{ asset('assets/js/vendor/visualization/d3/d3.min.js') }}"></script> -->
 <!-- <script src="{{ asset('assets/js/vendor/visualization/d3/d3_tooltip.js') }}"></script> -->
 

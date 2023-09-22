@@ -31,6 +31,34 @@
     </a>
 </li>
 @endcan
+@canany(['committees-list'])
+<li class="nav-item-header">
+    <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">Module</div>
+    <i class="ph-dots-three sidebar-resize-show"></i>
+</li>
+@endcanany
+@can('committees-list')
+<li class="nav-item">
+    <a class="nav-link {{ request()->routeIs('committees*') ? 'active' : ''}}" href="{{ route('committees.index') }}">
+        <i class="ph-bookmarks"></i>
+        <span>Committees</span>
+    </a>
+</li>
+@endcan
+@canany(['committeeTypes-list'])
+<li class="nav-item-header">
+    <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">Catalogs</div>
+    <i class="ph-dots-three sidebar-resize-show"></i>
+</li>
+@endcanany
+@can('committeeTypes-list')
+<li class="nav-item">
+    <a class="nav-link {{ request()->routeIs('committee-types*') ? 'active' : ''}}" href="{{ route('committee-types.index') }}">
+        <i class="ph-list"></i>
+        <span>Committee Types</span>
+    </a>
+</li>
+@endcan
 @canany(['notifications-list','audits-list', 'logs-list'])
 <li class="nav-item-header">
     <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">Configuration</div>

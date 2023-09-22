@@ -37,6 +37,36 @@ Route::controller(UserController::class)->prefix('users')->as('users.')->group(f
 
 /*
 |--------------------------------------------------------------------------
+| Committee Routes
+|--------------------------------------------------------------------------
+*/
+Route::controller(CommitteeController::class)->prefix('committees')->as('committees.')->group(function () {
+	Route::get('list',					'index'	   )->name('index'  	);
+	Route::get('create',				'create'   )->name('create' 	);
+	Route::post('store',				'store'	   )->name('store'  	);
+	Route::get('edit/{id}',				'edit'	   )->name('edit'	  	);
+	Route::get('show/{id}',				'show'	   )->name('show'	  	);
+	Route::patch('update/{committee}',	'update'   )->name('update' 	);
+	Route::delete('delete/{id}',		'destroy'  )->name('destroy'	);
+	Route::post('check_days',			'checkDays')->name('checkDays'	);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Committee Types Routes
+|--------------------------------------------------------------------------
+*/
+Route::controller(CommitteeTypeController::class)->prefix('committee-types')->as('committee-types.')->group(function () {
+	Route::get('list',				'index'	 )->name('index'  );
+	Route::get('create',			'create' )->name('create' );
+	Route::post('store',			'store'	 )->name('store'  );
+	Route::get('edit/{id}',			'edit'	 )->name('edit'	  );
+	Route::patch('update/{type}',	'update' )->name('update' );
+	Route::delete('delete/{id}',	'destroy')->name('destroy');
+});
+
+/*
+|--------------------------------------------------------------------------
 | Notifications Routes
 |--------------------------------------------------------------------------
 */
