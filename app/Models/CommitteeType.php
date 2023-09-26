@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -18,9 +19,9 @@ use Illuminate\Database\Eloquent\Model;
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class CommitteeType extends Model
+class CommitteeType extends Model implements Auditable
 {
-
+    use \OwenIt\Auditing\Auditable;
     /**
      * Attributes that should be mass-assignable.
      *

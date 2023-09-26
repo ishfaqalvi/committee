@@ -137,8 +137,8 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-        if ($user->id == 1 || auth()->user()->id ==  $id) {
-            return redirect()->back()->with('warning','You cannot delete this user.');    
+        if (in_array($user->id, [1, 2]) || auth()->user()->id ==  $id) {
+            return redirect()->back()->with('warning', 'This user cannot be deleted');
         }
         $user->delete();
         return redirect()->route('users.index')->with('success','User deleted successfully');

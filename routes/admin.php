@@ -37,6 +37,23 @@ Route::controller(UserController::class)->prefix('users')->as('users.')->group(f
 
 /*
 |--------------------------------------------------------------------------
+| Member Routes
+|--------------------------------------------------------------------------
+*/
+Route::controller(MemberController::class)->prefix('members')->as('members.')->group(function () {
+	Route::get('list',				'index'		)->name('index'		);
+	Route::get('create',			'create'	)->name('create'	);
+	Route::post('store',			'store'		)->name('store'		);
+	Route::get('edit/{id}',			'edit'		)->name('edit'		);
+	Route::get('show/{id}',			'show'		)->name('show'		);
+	Route::patch('update/{user}',	'update'	)->name('update'	);
+	Route::delete('delete/{id}',	'destroy'	)->name('destroy'	);
+    Route::post('check_email', 	 	'checkEmail')->name('checkEmail');
+    Route::post('check_phone',		'checkPhone')->name('checkPhone');
+});
+
+/*
+|--------------------------------------------------------------------------
 | Committee Routes
 |--------------------------------------------------------------------------
 */
@@ -47,6 +64,37 @@ Route::controller(CommitteeController::class)->prefix('committees')->as('committ
 	Route::get('edit/{id}',				'edit'	   )->name('edit'	  	);
 	Route::get('show/{id}',				'show'	   )->name('show'	  	);
 	Route::patch('update/{committee}',	'update'   )->name('update' 	);
+	Route::delete('delete/{id}',		'destroy'  )->name('destroy'	);
+	Route::post('check_days',			'checkDays')->name('checkDays'	);
+
+
+	Route::post('actions',				'actions'  )->name('actions');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Intervals Routes
+|--------------------------------------------------------------------------
+*/
+Route::controller(IntervalController::class)->prefix('intervals')->as('intervals.')->group(function () {
+	Route::post('store',				'store'	   	)->name('store'  	);
+	Route::patch('update/{interval}',	'update'   	)->name('update' 	);
+	Route::delete('delete/{id}',		'destroy'  	)->name('destroy'	);
+	Route::post('check_order',			'checkOrder')->name('checkOrder');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Payments Routes
+|--------------------------------------------------------------------------
+*/
+Route::controller(PaymentController::class)->prefix('payments')->as('payments.')->group(function () {
+	Route::get('list',					'index'	   )->name('index'  	);
+	Route::get('create',				'create'   )->name('create' 	);
+	Route::post('store',				'store'	   )->name('store'  	);
+	Route::get('edit/{id}',				'edit'	   )->name('edit'	  	);
+	Route::get('show/{id}',				'show'	   )->name('show'	  	);
+	Route::patch('update/{payment}',	'update'   )->name('update' 	);
 	Route::delete('delete/{id}',		'destroy'  )->name('destroy'	);
 	Route::post('check_days',			'checkDays')->name('checkDays'	);
 });

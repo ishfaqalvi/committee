@@ -28,11 +28,29 @@ class PermissionSeeder extends Seeder
                   'users-edit', 
                   'users-delete',
 
+                  'members-list', 
+                  'members-view', 
+                  'members-create', 
+                  'members-edit', 
+                  'members-delete',
+
                   'committees-list', 
                   'committees-view', 
                   'committees-create', 
                   'committees-edit', 
                   'committees-delete',
+
+                  'intervals-list', 
+                  'intervals-view', 
+                  'intervals-create', 
+                  'intervals-edit', 
+                  'intervals-delete',
+
+                  'payments-list', 
+                  'payments-view', 
+                  'payments-create', 
+                  'payments-edit', 
+                  'payments-delete',
 
                   'committeeTypes-list', 
                   'committeeTypes-view', 

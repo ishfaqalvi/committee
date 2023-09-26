@@ -15,14 +15,16 @@ return new class extends Migration
     {
         Schema::create('committees', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->foreignId('created_by')->constrained('users');
             $table->foreignId('committee_type_id')->constrained('committee_types');
+            $table->foreignId('created_by')->constrained('users');
+            $table->string('name');
             $table->integer('collection_days');
-            $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
+            $table->integer('amount');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->enum('approval', ['Approved', 'Not Approved'])->default('Not Approved');
+            $table->enum('status', ['Active', 'Inactive', 'Pending','Closed'])->default('Pending');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

@@ -16,6 +16,11 @@
         {!! $errors->first('collection_days', '<div class="invalid-feedback">:message</div>') !!}
     </div>
     <div class="form-group col-lg-6 mb-3">
+        {{ Form::label('amount') }}
+        {{ Form::number('amount', $committee->amount, ['class' => 'form-control' . ($errors->has('amount') ? ' is-invalid' : ''), 'placeholder' => 'Amount','required', 'min' => '1']) }}
+        {!! $errors->first('amount', '<div class="invalid-feedback">:message</div>') !!}
+    </div>
+    <div class="form-group col-lg-6 mb-3">
         {{ Form::label('start_date') }}
         {{ Form::text('start_date', $committee->start_date, ['class' => 'form-control start_date' . ($errors->has('start_date') ? ' is-invalid' : ''), 'placeholder' => 'Start Date','required']) }}
         {!! $errors->first('start_date', '<div class="invalid-feedback">:message</div>') !!}

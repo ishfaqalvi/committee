@@ -34,7 +34,7 @@
             <form method="POST" action="{{ route('committees.update', $committee->id) }}" class="validate"   role="form" enctype="multipart/form-data">
                 @csrf
                 {{ method_field('PATCH') }}
-                 @include('admin.committee.form')
+                @include('admin.committee.form')
             </form>
         </div>
     </div>

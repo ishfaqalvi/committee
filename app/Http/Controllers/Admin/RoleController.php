@@ -136,8 +136,8 @@ class RoleController extends Controller
     public function destroy($id)
     {
         $role = Role::find($id);
-        if (count(Role::get()) == 1 && $role->id == 1) {
-            return redirect()->back()->with('warning','You cannot delete the last role.');
+        if (in_array($role->id, [1, 2,3])) {
+            return redirect()->back()->with('warning', 'This role cannot be deleted');
         }
         $role->delete();
         return redirect()->route('roles.index')->with('success','Role deleted successfully');

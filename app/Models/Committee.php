@@ -2,7 +2,7 @@
 
 namespace App\Models;
 use Carbon\Carbon;
-
+use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -24,22 +24,25 @@ use Illuminate\Database\Eloquent\Model;
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class Committee extends Model
+class Committee extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     /**
      * Attributes that should be mass-assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name',
-        'description',
-        'created_by',
         'committee_type_id',
+        'created_by',
+        'name',
         'collection_days',
-        'status',
+        'amount',
         'start_date',
-        'end_date'
+        'end_date',
+        'approval',
+        'status',
+        'description'
     ];
 
     /**
@@ -50,6 +53,25 @@ class Committee extends Model
         $date = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
 
         $this->attributes['start_date'] = $date;
+    }
+
+    /**
+     * Scope model query.
+     *
+     * @var array
+     */
+    public function scopeUserRoleWise($query)
+    {
+        $user = auth()->user();
+        if ($user->hasRole(2)) {
+            $query->where('created_by', $user->id);
+        }
+        elseif($user->hasRole(3)){
+            $query->whereHas('intervals', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
+        }
+        return $query;
     }
 
     /**
@@ -66,5 +88,13 @@ class Committee extends Model
     public function user()
     {
         return $this->hasOne('App\Models\User', 'id', 'created_by');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function intervals()
+    {
+        return $this->hasMany('App\Models\Interval', 'committee_id', 'id');
     }
 }

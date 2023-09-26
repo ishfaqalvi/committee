@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use App\Models\Committee;
 use App\Models\CommitteeType;
 use Illuminate\Http\Request;
@@ -34,7 +36,7 @@ class CommitteeController extends Controller
      */
     public function index()
     {
-        $committees = Committee::get();
+        $committees = Committee::userRoleWise()->get();
 
         return view('admin.committee.index', compact('committees'));
     }
@@ -59,7 +61,14 @@ class CommitteeController extends Controller
      */
     public function store(Request $request)
     {
-        $committee = Committee::create($request->all());
+        DB::transaction(function () use ($request) {
+            $committee = Committee::create($request->all());
+            $intervals = [
+                ['user_id' => 2,                    'order' => 1, 'status' => 'Active'],
+                ['user_id' => $request->created_by, 'order' => 2, 'status' => 'Pending']
+            ];
+            $committee->intervals()->createMany($intervals);
+        });
 
         return redirect()->route('committees.index')
             ->with('success', 'Committee created successfully.');
@@ -74,8 +83,9 @@ class CommitteeController extends Controller
     public function show($id)
     {
         $committee = Committee::find($id);
+        $users = User::whereHas('roles', function($q){$q->whereIn('name', ['Manager','Member']);})->pluck('mobile_number','id');
 
-        return view('admin.committee.show', compact('committee'));
+        return view('admin.committee.show', compact('committee','users'));
     }
 
     /**
@@ -101,10 +111,18 @@ class CommitteeController extends Controller
      */
     public function update(Request $request, Committee $committee)
     {
-        $committee->update($request->all());
+        $message = DB::transaction(function () use ($request, $committee) {
+            $message = 'Committee updated successfully.';
+            if ($request->status == 'Active') {
+                $interval = $committee->intervals()->first();
+                addIntervalPayments($interval);
+                $message = 'Committee published successfully.';
+            }
+            $committee->update($request->all());
+            return $message;
+        });
 
-        return redirect()->route('committees.index')
-            ->with('success', 'Committee updated successfully');
+        return redirect()->route('committees.index')->with('success', $message);
     }
 
     /**
@@ -129,5 +147,19 @@ class CommitteeController extends Controller
     {
         $type = CommitteeType::find($request->id);
         if($request->days > $type->duration_days) { echo "false"; }else{ echo "true";}
+    }
+
+    /**
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
+    public function actions(Request $request)
+    {
+        dd($request->all());
+        $committee = Committee::find($id)->delete();
+
+        return redirect()->route('committees.index')
+            ->with('success', 'Committee deleted successfully');
     }
 }

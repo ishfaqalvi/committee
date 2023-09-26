@@ -38,9 +38,10 @@
                     <th>No</th>
 					<th>Name</th>
 					<th>Type</th>
-					<th>Start Date</th>
-					<th>End Date</th>
+                    <th>Days</th>
+					<th>Amount</th>
                     <th>Manager</th>
+                    <th>Approval</th>
                     <th>Status</th>
                     <th class="text-center">Actions</th>
                 </tr>
@@ -51,9 +52,10 @@
                     <td>{{ ++$key }}</td>
 					<td>{{ $committee->name }}</td>
 					<td>{{ $committee->committeeType->name }}</td>
-					<td>{{ $committee->start_date }}</td>
-					<td>{{ $committee->end_date }}</td>
+                    <td>{{ $committee->committeeType->duration_days }}</td>
+					<td>{{ number_format($committee->amount) }}</td>
                     <td>{{ $committee->user->name }}</td>
+                    <td>{{ $committee->approval }}</td>
                     <td>{{ $committee->status }}</td>
                     <td class="text-center">@include('admin.committee.actions')</td>
                 </tr>

@@ -4,6 +4,7 @@
 
 @section('page_content')
 <form method="POST" action="{{ route('register') }}" class="flex-fill">
+    @csrf
     <div class="row">
         <div class="col-lg-6 offset-lg-3">
             <div class="card mb-0">
@@ -83,33 +84,15 @@
                             <div class="mb-3">
                                 <label class="form-label">Mobile Number</label>
                                 <div class="form-control-feedback form-control-feedback-start">
-                                    <input type="email" class="form-control" placeholder="john@doe.com" name="mobile_number">
+                                    <input type="text" class="form-control" placeholder="+923001234567" name="mobile_number">
                                     <div class="form-control-feedback-icon">
-                                        <i class="ph-at text-muted"></i>
+                                        <i class="ph-phone text-muted"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div>
-                        <label class="form-check mb-2">
-                            <input type="checkbox" name="remember" class="form-check-input" checked>
-                            <span class="form-check-label">Send me <a href="#">&nbsp;test account settings</a></span>
-                        </label>
-
-                        <label class="form-check mb-2">
-                            <input type="checkbox" name="remember" class="form-check-input" checked>
-                            <span class="form-check-label">Subscribe to monthly newsletter</span>
-                        </label>
-
-                        <label class="form-check">
-                            <input type="checkbox" name="remember" class="form-check-input">
-                            <span class="form-check-label">Accept <a href="#">&nbsp;terms of service</a></span>
-                        </label>
-                    </div>
                 </div>
-
                 <div class="card-body text-end border-top">
                     <button type="submit" class="btn btn-primary">
                         <i class="ph-plus me-2"></i>

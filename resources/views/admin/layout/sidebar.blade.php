@@ -31,17 +31,33 @@
     </a>
 </li>
 @endcan
-@canany(['committees-list'])
+@canany(['committees-list','members-list','payments-list'])
 <li class="nav-item-header">
     <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">Module</div>
     <i class="ph-dots-three sidebar-resize-show"></i>
 </li>
 @endcanany
+@can('members-list')
+<li class="nav-item">
+    <a class="nav-link {{ request()->routeIs('members*') ? 'active' : ''}}" href="{{ route('members.index') }}">
+        <i class="ph-folder-user"></i>
+        <span>Members</span>
+    </a>
+</li>
+@endcan
 @can('committees-list')
 <li class="nav-item">
     <a class="nav-link {{ request()->routeIs('committees*') ? 'active' : ''}}" href="{{ route('committees.index') }}">
         <i class="ph-bookmarks"></i>
         <span>Committees</span>
+    </a>
+</li>
+@endcan
+@can('payments-list')
+<li class="nav-item">
+    <a class="nav-link {{ request()->routeIs('payments*') ? 'active' : ''}}" href="{{ route('payments.index') }}">
+        <i class="ph-money"></i>
+        <span>Payments</span>
     </a>
 </li>
 @endcan

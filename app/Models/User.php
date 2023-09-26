@@ -25,7 +25,9 @@ class User extends Authenticatable implements Auditable
         'name',
         'email',
         'password',
-        'image'
+        'mobile_number',
+        'image',
+        'created_by'
     ];
 
     /**
@@ -65,7 +67,7 @@ class User extends Authenticatable implements Auditable
     public function setImageAttribute($image)
     {
         if ($image) {
-            $this->attributes['image'] = uploadFile($image, 'profile', '100', '100');
+            $this->attributes['image'] = uploadFile($image, 'profile', '400', '400');
         }else {
             unset($this->attributes['image']);
         }
@@ -79,5 +81,27 @@ class User extends Authenticatable implements Auditable
     public function getImageAttribute($image)
     {
         return asset($image);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function user()
+    {
+        return $this->hasOne('App\Models\User', 'id', 'created_by');
+    }
+
+    /**
+     * Scope model query.
+     *
+     * @var array
+     */
+    public function scopeCreatedByUser($query)
+    {
+        $user = auth()->user();
+        if ($user->hasRole(2)) {
+            $query->where('created_by', $user->id);
+        }
+        return $query->whereHas('roles', function($q){$q->where('name', 'Member');});
     }
 }
