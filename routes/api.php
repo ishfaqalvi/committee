@@ -15,9 +15,35 @@ use App\Http\Controllers\API\MobileApiController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::namespace('\App\Http\Controllers\API')->group(function() {
+    /*
+    |--------------------------------------------------------------------------
+    | Auth Route
+    |--------------------------------------------------------------------------
+    */
+    Route::controller(AuthController::class)->prefix('auth')->group(function () {
+        Route::post('register', 'register');
+        Route::post('login', 'login');
+        Route::post('forgot_password', 'forgotPass');
+        Route::post('reset_password', 'resetPass');
+    });
 });
+
+Route::middleware('auth:sanctum')->namespace('\App\Http\Controllers\API')->group(function () {
+    /*
+        |--------------------------------------------------------------------------
+        | Auth Route
+        |--------------------------------------------------------------------------
+        */
+    Route::controller(AuthController::class)->prefix('auth')->group(function () {
+        Route::get('view', 			'view' 	 	 );
+        Route::post('update', 		'update' 	 );
+        Route::post('changePass', 	'changePass' );
+        Route::get('logout', 		'logout' 	 );
+    });
+});
+
 
 Route::controller(MobileApiController::class)->group(function () {
 	/*
