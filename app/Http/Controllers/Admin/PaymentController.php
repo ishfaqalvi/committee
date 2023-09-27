@@ -97,10 +97,14 @@ class PaymentController extends Controller
      */
     public function update(Request $request, Payment $payment)
     {
-        $payment->update($request->all());
+        $input = $request->all();
+        if ($request->status == 'Submitted') {
+            $input['date'] = date('Y-m-d');
+            $input['remarks'] = 'Committee submitted by manager.';
+        }
+        $payment->update($input);
 
-        return redirect()->route('payments.index')
-            ->with('success', 'Payment updated successfully');
+        return redirect()->back()->with('success', 'Payment updated successfully');
     }
 
     /**

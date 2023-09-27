@@ -1,9 +1,11 @@
 <?php
 
 
+use Carbon\Carbon;
 use App\Models\Setting;
 use Spatie\Image\Image;
 use Spatie\Image\Manipulations;
+use Spatie\Permission\Models\Role;
 
 /**
  * Get listing of a resource.
@@ -15,7 +17,7 @@ function uploadFile($file, $path, $width, $height)
     $extension = $file->getClientOriginalExtension();
     $name = uniqid().".".$extension;
  
-    $folder = 'upload/images/'.$path;
+    $folder = 'images/'.$path;
     $finalPath = $folder.'/'.$name;
     $file->move($folder, $name);
 
@@ -31,6 +33,21 @@ function uploadFile($file, $path, $width, $height)
 function settings($key)
 {
     return Setting::get($key);
+}
+
+/**
+ * Get listing of a resource.
+ *
+ * @return \Illuminate\Http\Response
+ */
+function getPermissons($user)
+{
+    $permissions = array();
+    foreach ($user->roles->pluck('id') as $id) {
+        $role = Role::find($id);
+        $permissions = array_merge($permissions, $role->permissions->pluck('name')->toArray());
+    }
+    return array_unique($permissions);
 }
 
 /**
@@ -51,4 +68,8 @@ function addIntervalPayments($interval)
         }
         $interval->payments()->create($data);
     }
+    $interval->update([
+        'start_date' => date('Y-m-d'), 
+        'close_date' => Carbon::now()->addDays($committee->collection_days)
+    ]);
 }

@@ -192,6 +192,24 @@
                 if (result.value === true)  $(this).closest("form").submit();
             });
         });
+        $(".sa-submit").click(function (event) {
+            event.preventDefault();
+            swalInit.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, submit it!',
+                cancelButtonText: 'No, cancel!',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                }
+            }).then((result) => {
+                if (result.value === true)  $(this).closest("form").submit();
+            });
+        });
     });
 </script>
 @endsection

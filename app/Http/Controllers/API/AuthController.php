@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\API\BaseController;
 use App\Mail\OTPMail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
@@ -16,7 +16,7 @@ use Spatie\Permission\Models\Role;
 class AuthController extends BaseController
 {
     /**
-     * Admin Register API
+     * Register API
      *
      * @return \Illuminate\Http\Response
      */
@@ -24,10 +24,9 @@ class AuthController extends BaseController
     {
         try {
             $validator = Validator::make($request->all(), [
-                'first_name'       => 'required|string|max:50',
-                'last_name'        => 'nullable',
-                'phone_number'     => 'required',
-                'email'            => 'required|string|email|max:50',
+                'name'             => 'required|string|max:50',
+                'mobile_number'    => 'required|string|unique:users',
+                'email'            => 'required|string|email|unique:users',
                 'password'         => 'required|min:8|max:16',
                 'confirm_password' => 'required|min:8|max:16|same:password',
             ]);
@@ -43,7 +42,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * Super Admin Login API
+     * Login API
      *
      * @return \Illuminate\Http\Response
      */
@@ -60,6 +59,7 @@ class AuthController extends BaseController
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 $user = Auth::user();
                 $user->token = $user->createToken("API TOKEN")->plainTextToken;
+                $user->permissions = getPermissons($user);
                 return $this->sendResponse($user, 'User login successfully.');
             } else {
                 return $this->sendError('Unauthorised.', ['error' => 'Email and password you provided is incorrect.']);
@@ -76,7 +76,8 @@ class AuthController extends BaseController
      */
     public function view()
     {
-        $user = Auth()->user();
+        $user = auth()->user();
+        $user->permissions = getPermissons($user);
         return $this->sendResponse($user, 'Profile data get successfully');
     }
 
@@ -89,44 +90,27 @@ class AuthController extends BaseController
     {
         try {
             $validator = Validator::make($request->all(), [
-                'first_name' => 'required'
+                'name'             => 'required',
+                'mobile_number'    => 'required|string|unique:users,mobile_number,'. auth()->user()->id,
+                'email'            => 'required|string|email|unique:users,email,' . auth()->user()->id,
+                'current_password' => 'nullable|required_with:new_password',
+                'new_password'     => 'nullable|min:8|max:16',
+                'confirm_password' => 'nullable|min:8|max:16|same:new_password'
             ]);
             if ($validator->fails()) {
                 return $this->sendError('Validation Error.', $validator->errors());
             }
-            $user = Auth::user();
-            $user->update($request->all());
-            return $this->sendResponse($user, 'Your profile updated successfully.');
-        } catch (\Throwable $th) {
-            return $this->sendException($th->getMessage());
-        }
-    }
-
-    /**
-     * Change user password api
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function changePass(Request $request)
-    {
-        try {
-            $validator = Validator::make($request->all(), [
-                'current_password' => 'required',
-                'new_password' => 'required|min:8|max:16',
-                'confirm_password' => 'required|min:8|max:16|same:new_password'
-            ]);
-            if ($validator->fails()) {
-                return $this->sendError('Validation Error.', $validator->errors());
-            }
+            $user = auth()->user();
             $input = $request->all();
-            $user = Auth::user();
-            if (Hash::check($input['current_password'], $user->password)) {
-                $input['password'] = $request->new_password;
-                $user->update($input);
-                return $this->sendResponse('', 'Your password changed successfully.');
-            } else {
-                return $this->sendError('Password Error.', 'Oops! current password is incorrect.');
+            if ($request->new_password) {
+                if (Hash::check($input['current_password'], $user->password)) {
+                    $input['password'] = $request->new_password;
+                } else {
+                    return $this->sendError('Password Error.', 'Oops! current password is incorrect.');
+                }
             }
+            $user->update($input);
+            return $this->sendResponse($user, 'Your profile updated successfully.');
         } catch (\Throwable $th) {
             return $this->sendException($th->getMessage());
         }
