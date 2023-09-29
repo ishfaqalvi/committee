@@ -43,6 +43,33 @@ class Interval extends Model implements Auditable
         'status'
     ];
 
+    /**
+     * Scope model query.
+     *
+     * @var array
+     */
+    public function scopePending($query)
+    {
+        return $query->where('status','Pending');
+    }/**
+     * Scope model query.
+     *
+     * @var array
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('status','Active');
+    }
+
+    /**
+     * Scope model query.
+     *
+     * @var array
+     */
+    public function scopeClosed($query)
+    {
+        return $query->where('status','Closed');
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

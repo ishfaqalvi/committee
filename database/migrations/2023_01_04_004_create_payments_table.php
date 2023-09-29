@@ -17,10 +17,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('interval_id')->constrained('intervals');
             $table->foreignId('user_id')->constrained('users');
-            $table->date('date')->nullable();
+            $table->bigInteger('date')->nullable();
             $table->string('remarks')->nullable();
             $table->string('attachment')->nullable();
-            $table->enum('status',['Pending','Approval','Submitted'])->default('Pending');
+            $table->string('tags')->nullable();
+            $table->enum('approval',['Approved','Not Approved'])->nullable();
+            $table->enum('status',['Pending','Submitted'])->default('Pending');
             $table->timestamps();
         });
     }

@@ -34,7 +34,7 @@
             <form method="POST" action="{{ route('payments.update', $payment->id) }}" class="validate"   role="form" enctype="multipart/form-data">
                 @csrf
                 {{ method_field('PATCH') }}
-                 @include('admin.payment.form')
+                @include('admin.payment.form')
             </form>
         </div>
     </div>
@@ -71,6 +71,21 @@
                 }
             }
         });
+        const stratDate = document.querySelector('.start_date');
+        if(stratDate) {
+            const dpBasic = new Datepicker(stratDate, {
+                container: '.content-inner',
+                buttonClass: 'btn',
+                prevArrow: document.dir == 'rtl' ? '&rarr;' : '&larr;',
+                nextArrow: document.dir == 'rtl' ? '&larr;' : '&rarr;',
+                format: 'yyyy-mm-dd'
+            });
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('.dropify').dropify();
     });
 </script>
 @endsection

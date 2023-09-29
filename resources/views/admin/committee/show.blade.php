@@ -19,16 +19,6 @@
                 </span>
                 Back
             </a>
-            <form action="{{ route('committees.actions')}}">
-                @csrf
-                <input type="hidden" name="id" value="{{ $committee->id }}">
-                <button type="submitt" class="btn btn-outline-primary btn-labeled btn-labeled-start rounded-pill">
-                    <span class="btn-labeled-icon bg-primary text-white rounded-pill">
-                        <i class="ph-arrow-circle-left"></i>
-                    </span>
-                    Publish
-                </button>
-            </form>
         </div>
     </div>
 </div>
@@ -82,7 +72,7 @@
                             <dd class="mb-3">{{ number_format($committee->amount) }}</dd>
                             <dt class="fs-sm text-primary text-uppercase mb-2">
                                 4. Start Date</dt>
-                            <dd class="mb-3">{{ $committee->start_date }}</dd>
+                            <dd class="mb-3">{{ date('Y-m-d', $committee->start_date) }}</dd>
                             <dt class="fs-sm text-primary text-uppercase mb-2">
                                 6. End Date</dt>
                             <dd class="mb-3">
@@ -200,6 +190,24 @@
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, submit it!',
+                cancelButtonText: 'No, cancel!',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                }
+            }).then((result) => {
+                if (result.value === true)  $(this).closest("form").submit();
+            });
+        });
+        $(".sa-approve").click(function (event) {
+            event.preventDefault();
+            swalInit.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, approved it!',
                 cancelButtonText: 'No, cancel!',
                 buttonsStyling: false,
                 customClass: {

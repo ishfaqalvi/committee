@@ -51,6 +51,16 @@ function getPermissons($user)
 }
 
 /**
+ * Get listing of a resource.
+ *
+ * @return \Illuminate\Http\Response
+ */
+function addDays($integer, $days)
+{
+    return $integer + ($days * 86400);
+}
+
+/**
  * Add listing of a resource.
  *
  * @return \Illuminate\Http\Response
@@ -59,14 +69,22 @@ function addIntervalPayments($interval)
 {
     $user = $interval->user;
     $committee = $interval->committee; 
-    foreach($committee->intervals()->pluck('user_id') as $member){
-        if ($member == $user->id) {
-            $data = ['user_id' => $member, 'date' => date('Y-m-d'), 'status' => 'Submitted'];
+    foreach($committee->intervals as $member){
+        if ($member->user_id == $user->id) {
+            $data = [
+                'user_id' => $member->user_id,
+                'date' => date('Y-m-d'),
+                'approval' => 'Approved',
+                'status' => 'Submitted'
+            ];
             $interval->increment('receivable', $committee->amount);
         }else{
             $data = ['user_id' => $member];   
         }
         $interval->payments()->create($data);
+    }
+    if (condition) {
+        // code...
     }
     $interval->update([
         'start_date' => date('Y-m-d'), 

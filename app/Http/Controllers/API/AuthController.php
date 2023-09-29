@@ -3,15 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController;
-use App\Mail\OTPMail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Models\User;
-
 use Spatie\Permission\Models\Role;
+use Illuminate\Http\Request;
+use App\Mail\OTPMail;
+use App\Models\User;
 
 class AuthController extends BaseController
 {

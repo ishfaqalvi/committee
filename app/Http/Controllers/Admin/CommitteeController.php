@@ -64,8 +64,8 @@ class CommitteeController extends Controller
         DB::transaction(function () use ($request) {
             $committee = Committee::create($request->all());
             $intervals = [
-                ['user_id' => 2,                    'order' => 1, 'status' => 'Active'],
-                ['user_id' => $request->created_by, 'order' => 2, 'status' => 'Pending']
+                ['user_id' => 2,                    'order' => 1],
+                ['user_id' => $request->created_by, 'order' => 2]
             ];
             $committee->intervals()->createMany($intervals);
         });
@@ -111,18 +111,10 @@ class CommitteeController extends Controller
      */
     public function update(Request $request, Committee $committee)
     {
-        $message = DB::transaction(function () use ($request, $committee) {
-            $message = 'Committee updated successfully.';
-            if ($request->status == 'Active') {
-                $interval = $committee->intervals()->first();
-                addIntervalPayments($interval);
-                $message = 'Committee published successfully.';
-            }
-            $committee->update($request->all());
-            return $message;
-        });
+        $committee->update($request->all());
 
-        return redirect()->route('committees.index')->with('success', $message);
+        return redirect()->route('committees.index')
+            ->with('success', 'Committee updated successfully.');
     }
 
     /**

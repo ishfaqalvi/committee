@@ -5,10 +5,8 @@
         </button>
     </div>
     <div class="navbar-brand flex-1 flex-lg-0">
-        <a href="index.html" class="d-inline-flex align-items-center">
-            <img src="https://demo.interface.club/limitless/demo/template/assets/images/logo_icon.svg" alt="">
-            <img src="https://demo.interface.club/limitless/demo/template/assets/images/logo_text_light.svg" class="d-none d-sm-inline-block h-16px ms-3" alt="">
-        </a>
+        <img src="{{ asset('assets/images/logo/logo1.png')}}" height="80px" alt="" class="me-2">
+        <h5 class="sidebar-resize-hide flex-grow-1 my-auto">Committee</h5>
     </div>
     <ul class="nav flex-row">
         <li class="nav-item d-lg-none">

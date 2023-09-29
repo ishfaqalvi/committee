@@ -44,6 +44,7 @@
 @section('script')
 <script>
     $(function(){
+        var _token = $("input[name='_token']").val();
         $('.validate').validate({
             errorClass: 'validation-invalid-label',
             successClass: 'validation-valid-label',
@@ -69,8 +70,41 @@
                 }else {
                     error.insertAfter(element);
                 }
+            },
+            rules:{
+                collection_days:{
+                    "remote":
+                    {
+                        url: "{{ route('committees.checkDays') }}",
+                        type: "POST",
+                        data: {
+                            _token:_token,
+                            id:function() {
+                                return $("select[name='committee_type_id']").val();
+                            },
+                            days: function() {
+                                return $("input[name='collection_days']").val();
+                            }
+                        },
+                    }
+                }
+            },
+            messages:{
+                collection_days:{
+                    remote: "The value entered exceeds the maximum allowed value"
+                }
             }
         });
+        const stratDate = document.querySelector('.start_date');
+        if(stratDate) {
+            const dpBasic = new Datepicker(stratDate, {
+                container: '.content-inner',
+                buttonClass: 'btn',
+                prevArrow: document.dir == 'rtl' ? '&rarr;' : '&larr;',
+                nextArrow: document.dir == 'rtl' ? '&larr;' : '&rarr;',
+                format: 'yyyy-mm-dd'
+            });
+        }
     });
 </script>
 @endsection

@@ -100,16 +100,8 @@
                 container: '.content-inner',
                 buttonClass: 'btn',
                 prevArrow: document.dir == 'rtl' ? '&rarr;' : '&larr;',
-                nextArrow: document.dir == 'rtl' ? '&larr;' : '&rarr;'
-            });
-        }
-        const endDate = document.querySelector('.end_date');
-        if(endDate) {
-            const dpBasic = new Datepicker(endDate, {
-                container: '.content-inner',
-                buttonClass: 'btn',
-                prevArrow: document.dir == 'rtl' ? '&rarr;' : '&larr;',
-                nextArrow: document.dir == 'rtl' ? '&larr;' : '&rarr;'
+                nextArrow: document.dir == 'rtl' ? '&larr;' : '&rarr;',
+                format: 'yyyy-mm-dd'
             });
         }
     });

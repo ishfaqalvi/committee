@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use DB;
 
 /**
  * Class PaymentController
@@ -33,33 +34,9 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payment::get();
+        $payments = Payment::userWise()->get();
 
         return view('admin.payment.index', compact('payments'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $payment = new Payment();
-        return view('admin.payment.create', compact('payment'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-       $payment = Payment::create($request->all());
-        return redirect()->route('payments.index')
-            ->with('success', 'Payment created successfully.');
     }
 
     /**
@@ -97,26 +74,68 @@ class PaymentController extends Controller
      */
     public function update(Request $request, Payment $payment)
     {
-        $input = $request->all();
-        if ($request->status == 'Submitted') {
-            $input['date'] = date('Y-m-d');
-            $input['remarks'] = 'Committee submitted by manager.';
-        }
-        $payment->update($input);
+        $payment->update($request->all());
 
-        return redirect()->back()->with('success', 'Payment updated successfully');
+        return redirect()->route('payments.index')
+            ->with('success', 'Payment updated successfully');
     }
 
     /**
-     * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  Payment $payment
+     * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function submit(Request $request, Payment $payment)
     {
-        $payment = Payment::find($id)->delete();
+        DB::transaction(function() use($payment, $request){
+            $committee = $payment->interval->committee;
 
-        return redirect()->route('payments.index')
-            ->with('success', 'Payment deleted successfully');
+            // Submitt payment
+            $date = strtotime(date('Y-m-d'));
+            $tag = $date > $payment->interval->close_date ? 'Late' : 'On Time';
+            $payment->update([
+                'date'      => date('Y-m-d'),
+                'remarks'   => 'Committee submitted and approved by manager.',
+                'tags'      => $tag,
+                'approval'  => 'Approved',
+                'status'    => 'Submitted'
+            ]);
+
+            // Update recievable payments
+            $payment->interval->increment('receivable',$committee->amount);
+            
+            // Update payable payments 
+            $interval = $committee->intervals()->where('user_id', $payment->user_id)->first();
+            $interval->increment('payable', $committee->amount);
+        }); 
+        return redirect()->back()->with('success', 'Payment Submitted successfully.');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  Payment $payment
+     * @return \Illuminate\Http\Response
+     */
+    public function approve(Request $request, Payment $payment)
+    {
+        DB::transaction(function() use($payment, $request){
+            $committee = $payment->interval->committee;
+
+            // Submitt payment
+            $tag = $payment->date > $payment->interval->close_date ? 'Late' : 'On Time';
+            $payment->update(['tags' => $tag, 'approval'  => 'Approved']);
+
+            // Update recievable payments
+            $payment->interval->increment('receivable',$committee->amount);
+            
+            // Update payable payments 
+            $interval = $committee->intervals()->where('user_id', $payment->user_id)->first();
+            $interval->increment('payable', $committee->amount);
+        }); 
+        return redirect()->back()->with('success', 'Payment approved successfully.');
     }
 }

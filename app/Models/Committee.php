@@ -50,9 +50,7 @@ class Committee extends Model implements Auditable
      */
     public function setStartDateAttribute($value)
     {
-        $date = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
-
-        $this->attributes['start_date'] = $date;
+        $this->attributes['start_date'] = strtotime($value);
     }
 
     /**

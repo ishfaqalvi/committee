@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('collection_days');
             $table->integer('amount');
-            $table->date('start_date')->nullable();
+            $table->bigInteger('start_date');
             $table->date('end_date')->nullable();
             $table->enum('approval', ['Approved', 'Not Approved'])->default('Not Approved');
             $table->enum('status', ['Active', 'Inactive', 'Pending','Closed'])->default('Pending');

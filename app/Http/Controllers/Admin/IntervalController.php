@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
+use App\Models\Committee;
 use App\Models\Interval;
 use Illuminate\Http\Request;
 
@@ -34,7 +35,19 @@ class IntervalController extends Controller
      */
     public function store(Request $request)
     {
-       $interval = Interval::create($request->all());
+        $committee = Committee::find($request->committee_id);
+        $closed    = Interval::closed()->where('committee_id',$request->committee_id)->get();
+        if (count($closed) >= 3) {
+            return redirect()->back()->with('warning', 'Oops! You can not add more members after 3 Intervals.');    
+        }
+        if ($committee->status == 'Active') {
+            $intervals = $committee->intervals()->whereIn('status', ['Active', 'Closed'])->get();
+            foreach($intervals as $interval)
+            {
+                $interval->payments()->create(['user_id' => $request->user_id]);
+            }    
+        }
+        $interval = Interval::create($request->all());
         return redirect()->back()->with('success', 'New Member added successfully.');
     }
 
@@ -93,7 +106,8 @@ class IntervalController extends Controller
     public function destroy($id)
     {
         $interval = Interval::find($id);
-        if (in_array($interval->order, [1, 2])) {
+        $committee = $interval->committee;
+        if (in_array($interval->order, [1, 2]) || $committee->approval == 'Approved') {
             return redirect()->back()->with('warning', 'Opps! This member cannot be deleted.');
         }
         $interval->delete();

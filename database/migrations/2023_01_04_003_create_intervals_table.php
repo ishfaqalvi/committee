@@ -17,12 +17,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('committee_id')->constrained('committees');
             $table->foreignId('user_id')->constrained('users');
-            $table->date('start_date')->nullable();
-            $table->date('close_date')->nullable();
+            $table->bigInteger('start_date')->nullable();
+            $table->bigInteger('close_date')->nullable();
             $table->integer('order')->default(1);
             $table->integer('payable')->default(0);
             $table->integer('receivable')->default(0);
-            $table->string('status')->default('Pending');
+            $table->enum('status',['Pending','Active','Closed'])->default('Pending');
             $table->timestamps();
         });
     }

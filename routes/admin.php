@@ -66,9 +66,6 @@ Route::controller(CommitteeController::class)->prefix('committees')->as('committ
 	Route::patch('update/{committee}',	'update'   )->name('update' 	);
 	Route::delete('delete/{id}',		'destroy'  )->name('destroy'	);
 	Route::post('check_days',			'checkDays')->name('checkDays'	);
-
-
-	Route::post('actions',				'actions'  )->name('actions');
 });
 
 /*
@@ -90,13 +87,11 @@ Route::controller(IntervalController::class)->prefix('intervals')->as('intervals
 */
 Route::controller(PaymentController::class)->prefix('payments')->as('payments.')->group(function () {
 	Route::get('list',					'index'	   )->name('index'  	);
-	Route::get('create',				'create'   )->name('create' 	);
-	Route::post('store',				'store'	   )->name('store'  	);
+	Route::patch('submit/{payment}',	'submit'   )->name('submit'		);
+	Route::patch('approve/{payment}',	'approve'  )->name('approve'	);
 	Route::get('edit/{id}',				'edit'	   )->name('edit'	  	);
 	Route::get('show/{id}',				'show'	   )->name('show'	  	);
 	Route::patch('update/{payment}',	'update'   )->name('update' 	);
-	Route::delete('delete/{id}',		'destroy'  )->name('destroy'	);
-	Route::post('check_days',			'checkDays')->name('checkDays'	);
 });
 
 /*

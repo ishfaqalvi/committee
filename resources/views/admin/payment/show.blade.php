@@ -1,7 +1,7 @@
 @extends('admin.layout.app')
 
 @section('title')
-    {{ $payment->name ?? "{{ __('Show') Payment" }}
+    {{ $payment->name ?? "Show Payment" }}
 @endsection
 
 @section('header')
@@ -30,36 +30,54 @@
         <div class="card-header">
             <h5 class="mb-0">{{ __('Show') }} Payment</h5>
         </div>
-        <div class="card-body d-flex justify-content-around">
-            <div class="form-group d-flex flex-column">
-                 
-                        <div class="form-group">
-                            <strong>Interval Id:</strong>
-                            {{ $payment->interval_id }}
-                        </div>
-                        <div class="form-group">
-                            <strong>User Id:</strong>
-                            {{ $payment->user_id }}
-                        </div>
-                        <div class="form-group">
-                            <strong>Date:</strong>
-                            {{ $payment->date }}
-                        </div>
-                        <div class="form-group">
-                            <strong>Remarks:</strong>
-                            {{ $payment->remarks }}
-                        </div>
-                        <div class="form-group">
-                            <strong>Attachment:</strong>
-                            {{ $payment->attachment }}
-                        </div>
-                        <div class="form-group">
-                            <strong>Status:</strong>
-                            {{ $payment->status }}
-                        </div>
-
+        <div class="card-body">
+            <div class="d-flex flex-column">
+                <div class="form-group mb-3">
+                    <strong>Committee:</strong>
+                    {{ $payment->interval->committee->name }}
+                </div>
+                <div class="form-group mb-3">
+                    <strong>Amount:</strong>
+                    {{ number_format($payment->interval->committee->amount) }}
+                </div>
+                <div class="form-group mb-3">
+                    <strong>Recievable Member:</strong>
+                    {{ $payment->interval->user->name }}
+                </div>
+                <div class="form-group mb-3">
+                    <strong>Payable Member:</strong>
+                    {{ $payment->user->name }}
+                </div>
+                <div class="form-group mb-3">
+                    <strong>Date:</strong>
+                    {{ date('Y-m-d', $payment->date) }}
+                </div>
+                <div class="form-group mb-3">
+                    <strong>Approval:</strong>
+                    {{ $payment->approval }}
+                </div>
+                <div class="form-group mb-3">
+                    <strong>Status:</strong>
+                    {{ $payment->status }}
+                    @php($tag = $payment->tags)
+                    @if(!empty($tag) && $tag == 'Late')
+                        <span class="badge bg-warning rounded-pill">{{ $tag }}</span>
+                    @endif 
+                    @if(!empty($tag) && $tag == 'On Time')
+                        <span class="badge bg-success rounded-pill">{{ $tag }}</span>
+                    @endif
+                </div>
+                <div class="form-group mb-3">
+                    <strong>Remarks:</strong>
+                    {{ $payment->remarks }}
+                </div>
+                @if($payment->attachment != '' && isset($payment->attachment))
+                <div class="form-group mb-3">
+                    <strong>Attachment:</strong>
+                    <img src="{{ $payment->attachment }}" max-width="100%"> 
+                </div>
+                @endif
             </div>
-
         </div>
     </div>
 </div>

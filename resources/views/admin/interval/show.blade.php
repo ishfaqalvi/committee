@@ -1,7 +1,7 @@
 <div class="list-group list-group-borderless py-2">
     <div class="list-group-item fw-semibold">Payments</div>
     @foreach($committee->intervals()->orderBy('order')->get() as $row => $interval)
-    @if($interval->status == 'Completed')
+    @if($interval->status == 'Closed')
         @php($indicator = 'bg-secondary')
     @elseif($interval->status == 'Active')
         @php($indicator = 'bg-success')
@@ -22,7 +22,7 @@
             </div>
             @if($interval->start_date)
             <span class="badge bg-primary rounded-pill">
-                {{ $interval->start_date.' / '.$interval->close_date}}
+                {{ date('Y-m-d', $interval->start_date).' / '.date('Y-m-d', $interval->close_date) }}
             </span>
             @endif
             <div class="align-self-center ms-3">

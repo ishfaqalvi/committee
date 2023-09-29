@@ -32,8 +32,64 @@ class Payment extends Model implements Auditable
      *
      * @var array
      */
-    protected $fillable = ['interval_id','user_id','date','remarks','attachment','status'];
+    protected $fillable = [
+        'interval_id',
+        'user_id',
+        'date',
+        'remarks',
+        'attachment',
+        'tags',
+        'approval',
+        'status'
+    ];
 
+    /**
+     * Interact with the duration days.
+     */
+    public function setDateAttribute($value)
+    {
+        $this->attributes['date'] = strtotime($value);
+    }
+
+    /**
+     * The set attributes.
+     *
+     * @var array
+     */
+    public function setAttachmentAttribute($image)
+    {
+        if ($image) {
+            $name = time().$image->getClientOriginalName();
+            $image->move('images/payments', $name);
+            $this->attributes['attachment'] = 'images/payments/'.$name;
+        }else {
+            unset($this->attributes['attachment']);
+        }
+    }
+
+    /**
+     * The get attributes.
+     *
+     * @var array
+     */
+    public function getAttachmentAttribute($image)
+    {
+        if (isset($image)) { return asset($image); }
+    }
+
+    /**
+     * Scope model query.
+     *
+     * @var array
+     */
+    public function scopeUserWise($query)
+    {
+        $user = auth()->user();
+        if ($user->id != 1) {
+            $query->where('user_id', $user->id);
+        }
+        return $query;
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

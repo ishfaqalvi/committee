@@ -22,7 +22,7 @@ class CommitteeSeeder extends Seeder
                 'committee_type_id' => 1,
                 'collection_days'   => 2,
                 'amount'            => 500,
-                'start_date'        => '2023-01-10',
+                'start_date'        => '1695841200',
                 'description'       => 'Committee A is a mutual savings group where members contribute a fixed amount of money regularly to a communal fund, which is then awarded to one member at a time in a rotational manner. This committee aims to encourage savings and provide financial assistance, fostering a sense of community and mutual support amongst the members.',
             ],
             [
@@ -31,7 +31,7 @@ class CommitteeSeeder extends Seeder
                 'committee_type_id' => 2,
                 'collection_days'   => 6,
                 'amount'            => 500,
-                'start_date'        => '2023-01-10',
+                'start_date'        => '1695841200',
                 'description'       => 'Committee B is a mutual savings group where members contribute a fixed amount of money regularly to a communal fund, which is then awarded to one member at a time in a rotational manner. This committee aims to encourage savings and provide financial assistance, fostering a sense of community and mutual support amongst the members.',
             ]
         ]);   

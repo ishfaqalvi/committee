@@ -27,3 +27,5 @@ Auth::routes();
 |--------------------------------------------------------------------------
 */
 Route::get('/', [DynamicPageController::class, 'viewHomePage']);
+
+Route::get('cron-jobs', [DynamicPageController::class, 'cronJob']);

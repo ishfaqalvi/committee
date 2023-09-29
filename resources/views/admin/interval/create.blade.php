@@ -18,8 +18,9 @@
                         {{ Form::number('order', null, ['class' => 'form-control' . ($errors->has('order') ? ' is-invalid' : ''), 'placeholder' => 'Order','required','min' => '1']) }}
                         {!! $errors->first('order', '<div class="invalid-feedback">:message</div>') !!}
                     </div>
-                    <div class="col-lg-2 d-flex justify-content-end align-items-center">
-                        <button type="submit" class="btn btn-primary ms-3">
+                    <div class="form-group col-lg-2">
+                        {{ Form::label('submit') }}
+                        <button type="submit" class="form-control btn btn-primary">
                             Submit <i class="ph-paper-plane-tilt ms-2"></i>
                         </button>
                     </div>

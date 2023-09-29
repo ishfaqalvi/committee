@@ -1,5 +1,5 @@
 @foreach($committee->intervals()->orderBy('order')->get() as $key => $interval)
-@if($interval->status == 'Completed')
+@if($interval->status == 'Closed')
     @php($bg = 'bg-secondary')
 @elseif($interval->status == 'Active')
     @php($bg = 'bg-teal')

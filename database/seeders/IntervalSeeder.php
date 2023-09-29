@@ -16,9 +16,9 @@ class IntervalSeeder extends Seeder
     public function run()
     {
         DB::table('intervals')->insert([
-            ['committee_id' => 1, 'user_id' => 2, 'order' => 1, 'status' => 'Active'],
+            ['committee_id' => 1, 'user_id' => 2, 'order' => 1, 'status' => 'Pending'],
             ['committee_id' => 1, 'user_id' => 3, 'order' => 2, 'status' => 'Pending'],
-            ['committee_id' => 2, 'user_id' => 2, 'order' => 1, 'status' => 'Active'],
+            ['committee_id' => 2, 'user_id' => 2, 'order' => 1, 'status' => 'Pending'],
             ['committee_id' => 2, 'user_id' => 3, 'order' => 2, 'status' => 'Pending'],
         ]);
     }
