@@ -41,15 +41,16 @@ Route::controller(UserController::class)->prefix('users')->as('users.')->group(f
 |--------------------------------------------------------------------------
 */
 Route::controller(MemberController::class)->prefix('members')->as('members.')->group(function () {
-	Route::get('list',				'index'		)->name('index'		);
-	Route::get('create',			'create'	)->name('create'	);
-	Route::post('store',			'store'		)->name('store'		);
-	Route::get('edit/{id}',			'edit'		)->name('edit'		);
-	Route::get('show/{id}',			'show'		)->name('show'		);
-	Route::patch('update/{user}',	'update'	)->name('update'	);
-	Route::delete('delete/{id}',	'destroy'	)->name('destroy'	);
-    Route::post('check_email', 	 	'checkEmail')->name('checkEmail');
-    Route::post('check_phone',		'checkPhone')->name('checkPhone');
+	Route::get('list',				'index'		 )->name('index'	  );
+	Route::get('create',			'create'	 )->name('create'	  );
+	Route::post('store',			'store'		 )->name('store'	  );
+	Route::get('edit/{id}',			'edit'		 )->name('edit'		  );
+	Route::get('show/{id}',			'show'		 )->name('show'		  );
+	Route::patch('update/{user}',	'update'	 )->name('update'	  );
+	Route::delete('delete/{id}',	'destroy'	 )->name('destroy'	  );
+    Route::post('check_email', 	 	'checkEmail' )->name('checkEmail' );
+    Route::post('check_phone',		'checkPhone' )->name('checkPhone' );
+    Route::get('search',			'search'	 )->name('search'	  );
 });
 
 /*

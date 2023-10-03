@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use App\Models\Member;
 use App\Models\User;
 
 /**
@@ -35,7 +36,7 @@ class MemberController extends Controller
      */
     public function index()
     {
-        $members = User::createdByUser()->get();
+        $members = Member::createdByUser()->with('user','createdBy')->get();
 
         return view('admin.member.index', compact('members'));
     }
@@ -134,6 +135,22 @@ class MemberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function search(Request $request)
+    {
+        $parameter = $request->q;
+        $page      = $request->page;
+        $users     = User::where('name', 'LIKE', '%' . $parameter . '%')
+                    ->orWhere('email', 'LIKE', '%' . $parameter . '%')
+                    ->orWhere('mobile_number', 'LIKE', '%' . $parameter . '%')
+                    ->paginate(10, ['*'], 'page', $page)->toArray();
+        return $users;
+    }
+
+    /**
+     * Validate a resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function checkEmail(Request $request)
     {
         $query = User::where('email', $request->email);
@@ -159,5 +176,16 @@ class MemberController extends Controller
         $user = $query->first();
 
         if($user){ echo "false"; }else{ echo "true";}
+    }
+
+    /**
+     * Validate a resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function checkMember(Request $request)
+    {
+        $member = Member::where([['user_id', $request->user],['created_by',$request->parent]])->firtst();
+        if($member){ echo "false"; }else{ echo "true";}
     }
 }

@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use App\Mail\OTPMail;
 use App\Models\User;
+use Auth;
 
 class AuthController extends BaseController
 {
@@ -168,7 +169,7 @@ class AuthController extends BaseController
      */
     public function logout()
     {
-        Auth()->user()->tokens()->delete();
+        auth()->user()->tokens()->delete();
         return $this->sendResponse('', 'You have successfully logout');
     }
 }

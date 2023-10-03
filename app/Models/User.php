@@ -82,26 +82,4 @@ class User extends Authenticatable implements Auditable
     {
         return asset($image);
     }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function user()
-    {
-        return $this->hasOne('App\Models\User', 'id', 'created_by');
-    }
-
-    /**
-     * Scope model query.
-     *
-     * @var array
-     */
-    public function scopeCreatedByUser($query)
-    {
-        $user = auth()->user();
-        if ($user->hasRole(2)) {
-            $query->where('created_by', $user->id);
-        }
-        return $query->whereHas('roles', function($q){$q->where('name', 'Member');});
-    }
 }

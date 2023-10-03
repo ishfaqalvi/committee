@@ -20,12 +20,6 @@
                 </span>
                 Create New
             </a>
-            <a href="#" data-bs-toggle="modal" data-bs-target="#addMember" class="btn btn-outline-primary btn-labeled btn-labeled-start rounded-pill">
-                <span class="btn-labeled-icon bg-primary text-white rounded-pill">
-                    <i class="ph-plus"></i>
-                </span>
-                Add New
-            </a>
         </div>
     </div>
     @endcan
@@ -33,7 +27,6 @@
 @endsection
 
 @section('content')
-@include('admin.member.add')
 <div class="col-sm-12">
     <div class="card">
         <div class="card-header">
@@ -43,10 +36,10 @@
             <thead class="thead">
                 <tr>
                     <th>No</th>
-					<th>Name</th>
-					<th>Email</th>
-					<th>Mobile Number</th>
-                    <th>Created By</th>
+                    
+										<th>User Id</th>
+										<th>Created By</th>
+
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
@@ -54,10 +47,10 @@
             @foreach ($members as $key => $member)
                 <tr>
                     <td>{{ ++$key }}</td>
-					<td>{{ $member->user->name }}</td>
-					<td>{{ $member->user->email }}</td>
-					<td>{{ $member->user->mobile_number }}</td>
-                    <td>{{ $member->createdBy->name }}</td>
+                    
+											<td>{{ $member->user_id }}</td>
+											<td>{{ $member->created_by }}</td>
+
                     <td class="text-center">@include('admin.member.actions')</td>
                 </tr>
             @endforeach
@@ -66,7 +59,36 @@
     </div>
 </div>
 @endsection
-
+@canany(['members-view', 'members-edit', 'members-delete'])
+<div class="d-inline-flex">
+    <div class="dropdown">
+        <a href="#" class="text-body" data-bs-toggle="dropdown">
+            <i class="ph-list"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end">
+            <form action="{{ route('members.destroy',$member->id) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                @can('members-view')
+                    <a href="{{ route('members.show',$member->id) }}" class="dropdown-item">
+                        <i class="ph-eye me-2"></i>{{ __('Show') }}
+                    </a>
+                @endcan
+                @can('members-edit')
+                    <a href="{{ route('members.edit',$member->id) }}" class="dropdown-item">
+                        <i class="ph-note-pencil me-2"></i>{{ __('Edit') }}
+                    </a>
+                @endcan
+                @can('members-delete')
+                    <button type="submit" class="dropdown-item sa-confirm">
+                        <i class="ph-trash me-2"></i>{{ __('Delete') }}
+                    </button>
+                @endcan
+            </form>
+        </div>
+    </div>
+</div>
+@endcanany
 @section('script')
 <script>
     $(function () {
@@ -96,53 +118,6 @@
             }).then((result) => {
                 if (result.value === true)  $(this).closest("form").submit();
             });
-        });
-        function formatRepo (repo) {
-            if (repo.loading) return repo.text;
-            const markup = `
-                <div class="select2-result-repository clearfix">
-                    <div class="select2-result-repository__avatar"><img src="${repo.image}" /></div>
-                    <div class="select2-result-repository__meta">
-                        <div class="select2-result-repository__title">${repo.name}</div>
-                        <div class="select2-result-repository__description">${repo.email}</div>
-                    </div>
-                    <div class="select2-result-repository__statistics">
-                        <div class="select2-result-repository__forks">Mobile #: ${repo.mobile_number}</div>
-                    </div>
-                </div>
-            `;
-            return markup;
-        }
-        function formatRepoSelection (repo) {
-            return repo.name || repo.text;
-        }
-        $('.select-remote-data').select2({
-            dropdownParent: $("#addMember"),
-            ajax: {
-                url: 'search',
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        q: params.term,
-                        page: params.page
-                    };
-                },
-                processResults: function (responce, params) {
-                    params.page = params.page || 1;
-                    return {
-                        results: responce.data,
-                        pagination: {
-                            more: (params.page * 10) < responce.total
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; },
-            minimumInputLength: 1,
-            templateResult: formatRepo,
-            templateSelection: formatRepoSelection
         });
     });
 </script>
