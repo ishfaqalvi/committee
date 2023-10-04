@@ -82,4 +82,12 @@ class User extends Authenticatable implements Auditable
     {
         return asset($image);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function createdBy()
+    {
+        return $this->hasOne('App\Models\User', 'id', 'created_by');
+    }
 }

@@ -1,7 +1,7 @@
 @extends('admin.layout.app')
 
 @section('title')
-    {{ $member->name ?? "{{ __('Show') Member" }}
+    {{ $member->user->name ?? "{{ __('Show') Member" }}
 @endsection
 
 @section('header')
@@ -32,20 +32,20 @@
         </div>
         <div class="card-body d-flex justify-content-around">
             <div class="form-group">
-                <img class="rounded-2" src="{{ asset($member->image) }}" width="200px"/>
+                <img class="rounded-2" src="{{ asset($member->user->image) }}" width="200px"/>
             </div>
             <div class="form-group d-flex flex-column">
                 <h5>Member Information</h5>
                 <strong>Name:</strong>
-                {{ $member->name }}
+                {{ $member->user->name }}
                 <strong>Email:</strong>
-                {{ $member->email }}
+                {{ $member->user->email }}
                 <strong>Mobile #:</strong>
-                {{ $member->mobile_number }}
+                {{ $member->user->mobile_number }}
             </div>
             <div class="form-group d-flex flex-column">
                 <h5>Member Roles</h5>
-                @foreach($member->roles as $role)
+                @foreach($member->user->roles as $role)
                     <span class="badge rounded-pill bg-success mt-1">{{ $role->name }}</span>
                 @endforeach
             </div>

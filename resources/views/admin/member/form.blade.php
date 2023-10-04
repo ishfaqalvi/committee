@@ -1,4 +1,5 @@
 <div class="row">
+    <input type="hidden" name="created_by" value="{{ auth()->user()->id }}">
     <div class="form-group col-lg-6 mb-3">
         {{ Form::label('name') }}
         {{ Form::text('name', $member->name, ['class' => 'form-control' . ($errors->has('name') ? ' is-invalid' : ''), 'placeholder' => 'Name','required']) }}

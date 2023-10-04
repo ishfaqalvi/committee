@@ -14,17 +14,17 @@
     @can('members-create')
     <div class="d-lg-block my-lg-auto ms-lg-auto">
         <div class="d-sm-flex align-items-center mb-3 mb-lg-0 ms-lg-3">
-            <a href="{{ route('members.create') }}" class="btn btn-outline-primary btn-labeled btn-labeled-start rounded-pill">
-                <span class="btn-labeled-icon bg-primary text-white rounded-pill">
-                    <i class="ph-plus"></i>
-                </span>
-                Create New
-            </a>
             <a href="#" data-bs-toggle="modal" data-bs-target="#addMember" class="btn btn-outline-primary btn-labeled btn-labeled-start rounded-pill">
                 <span class="btn-labeled-icon bg-primary text-white rounded-pill">
                     <i class="ph-plus"></i>
                 </span>
                 Add New
+            </a>
+            <a href="{{ route('members.create') }}" class="btn btn-outline-primary btn-labeled btn-labeled-start rounded-pill ms-2">
+                <span class="btn-labeled-icon bg-primary text-white rounded-pill">
+                    <i class="ph-plus"></i>
+                </span>
+                Create New
             </a>
         </div>
     </div>
@@ -46,7 +46,7 @@
 					<th>Name</th>
 					<th>Email</th>
 					<th>Mobile Number</th>
-                    <th>Created By</th>
+                    <th>Manager</th>
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
@@ -57,7 +57,7 @@
 					<td>{{ $member->user->name }}</td>
 					<td>{{ $member->user->email }}</td>
 					<td>{{ $member->user->mobile_number }}</td>
-                    <td>{{ $member->createdBy->name }}</td>
+                    <td>{{ $member->user->createdBy->name }}</td>
                     <td class="text-center">@include('admin.member.actions')</td>
                 </tr>
             @endforeach
@@ -143,6 +143,55 @@
             minimumInputLength: 1,
             templateResult: formatRepo,
             templateSelection: formatRepoSelection
+        });
+        var _token = $("input[name='_token']").val();
+        var parent = $("input[name='created_by']").val();
+        $('.validate').validate({
+            errorClass: 'validation-invalid-label',
+            highlight: function(element, errorClass) {
+                $(element).removeClass(errorClass);
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element, errorClass) {
+                $(element).removeClass(errorClass);
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+            },
+            success: function(label) {
+                label.addClass('validation-valid-label').text('Success.');
+            },
+            errorPlacement: function(error, element) {
+                if (element.hasClass('select2-hidden-accessible')) {
+                    error.appendTo(element.parent());
+                }else if (element.parents().hasClass('form-control-feedback') || element.parents().hasClass('form-check') || element.parents().hasClass('input-group')) {
+                    error.appendTo(element.parent().parent());
+                }else {
+                    error.insertAfter(element);
+                }
+            },
+            rules:{
+                user_id:{
+                    "remote":
+                    {
+                        url: "{{ route('members.checkMember') }}",
+                        type: "POST",
+                        data: {
+                            _token:_token,
+                            parent:parent,
+                            user: function() {
+                                return $("select[name='user_id']").val();
+                            }
+                        },
+                    }
+                }
+            },
+            messages:{
+                user_id:{
+                    required: "Please search and chose any member.",
+                    remote: jQuery.validator.format("This member is already exist in your list.")
+                }
+            }
         });
     });
 </script>

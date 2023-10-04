@@ -24,6 +24,7 @@ Route::namespace('\App\Http\Controllers\API')->group(function() {
         Route::post('login',            'login'     );
         Route::post('forgot_password',  'forgotPass');
         Route::post('reset_password',   'resetPass' );
+        Route::post('check_user',       'checkUser' );
     });
 });
 
@@ -34,8 +35,23 @@ Route::middleware('auth:sanctum')->namespace('\App\Http\Controllers\API')->group
     |--------------------------------------------------------------------------
     */
     Route::controller(AuthController::class)->prefix('auth')->group(function () {
-        Route::get('view', 			'view' 	 );
-        Route::post('update', 		'update' );
-        Route::get('logout', 		'logout' );
+        Route::get('view', 			'view' 	   );
+        Route::post('update', 		'update'   );
+        Route::get('logout', 		'logout'   );
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Member Route
+    |--------------------------------------------------------------------------
+    */
+    Route::controller(MemberController::class)->prefix('members')->group(function () {
+        Route::get('list',              'index'  );
+        Route::post('store',            'store'  );
+        Route::post('add',              'add'    );
+        Route::get('search',            'search' );
+        Route::get('show/{id}',         'show'   );
+        Route::patch('update/{user}',   'update' );
+        Route::delete('delete/{id}',    'destroy');
     });
 });

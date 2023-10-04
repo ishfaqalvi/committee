@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('image')->default('images/profile/avatar.jpg');
             $table->rememberToken();
+            $table->integer('created_by')->nullable();
             $table->timestamps();
         });
     }

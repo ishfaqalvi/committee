@@ -60,10 +60,25 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        $member = User::create($request->all());
-        $member->assignRole(3);
+        $user = User::create($request->all());
+        $user->assignRole(3);
+        Member::create(['user_id' => $user->id, 'created_by' => $request->created_by]);
+
         return redirect()->route('members.index')
             ->with('success', 'Member created successfully.');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function add(Request $request)
+    {
+        Member::create(['user_id' => $request->user_id, 'created_by' => $request->created_by]);
+        
+        return redirect()->back()->with('success', 'Member added successfully.');
     }
 
     /**
@@ -74,7 +89,7 @@ class MemberController extends Controller
      */
     public function show($id)
     {
-        $member = User::find($id);
+        $member = Member::find($id);
 
         return view('admin.member.show', compact('member'));
     }
@@ -88,8 +103,11 @@ class MemberController extends Controller
     public function edit($id)
     {
         $member = User::find($id);
-
-        return view('admin.member.edit', compact('member'));
+        if (auth()->user()->id == $member->created_by) {
+            return view('admin.member.edit', compact('member'));    
+        }
+        return redirect()->back()
+            ->with('warning', 'Oops! You are not the creater of this member.');
     }
 
     /**
@@ -99,7 +117,7 @@ class MemberController extends Controller
      * @param  User $member
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $member)
+    public function update(Request $request, User $user)
     {
         $this->validate($request, [
             'name'          => 'required',
@@ -111,7 +129,7 @@ class MemberController extends Controller
         if(empty($input['password'])){
             $input = Arr::except($input,array('password'));    
         }
-        $member->update($input);
+        $user->update($input);
 
         return redirect()->route('members.index')
             ->with('success', 'Member updated successfully');
@@ -124,10 +142,10 @@ class MemberController extends Controller
      */
     public function destroy($id)
     {
-        $member = User::find($id)->delete();
+        $member = Member::find($id)->delete();
 
         return redirect()->route('members.index')
-            ->with('success', 'Member deleted successfully');
+            ->with('success', 'Member removed successfully.');
     }
 
     /**
@@ -185,7 +203,7 @@ class MemberController extends Controller
      */
     public function checkMember(Request $request)
     {
-        $member = Member::where([['user_id', $request->user],['created_by',$request->parent]])->firtst();
+        $member = Member::where([['user_id', $request->user],['created_by',$request->parent]])->first();
         if($member){ echo "false"; }else{ echo "true";}
     }
 }

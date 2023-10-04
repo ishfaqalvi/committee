@@ -14,7 +14,7 @@
                     </a>
                 @endcan
                 @can('members-edit')
-                    <a href="{{ route('members.edit',$member->id) }}" class="dropdown-item">
+                    <a href="{{ route('members.edit',$member->user->id) }}" class="dropdown-item">
                         <i class="ph-note-pencil me-2"></i>{{ __('Edit') }}
                     </a>
                 @endcan

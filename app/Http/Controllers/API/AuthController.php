@@ -172,4 +172,21 @@ class AuthController extends BaseController
         auth()->user()->tokens()->delete();
         return $this->sendResponse('', 'You have successfully logout');
     }
+
+    /**
+     * Validate a resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function checkUser(Request $request)
+    {
+        $user = Null;
+        if ($email = $request->email) {
+            $user = User::where('email', $email)->first();    
+        }
+        if ($number = $request->mobile_number) {
+            $user = User::where('email', $number)->first();    
+        }
+        return $this->sendResponse($user, 'User data get successfully.');
+    }
 }
