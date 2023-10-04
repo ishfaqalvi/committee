@@ -187,6 +187,11 @@ class AuthController extends BaseController
         if ($number = $request->mobile_number) {
             $user = User::where('email', $number)->first();    
         }
-        return $this->sendResponse($user, 'User data get successfully.');
+
+        if (empty($user)) {
+            return $this->sendError('Record Not Found.', ['Against this parameter no record found!']);
+        }else{
+            return $this->sendResponse($user, 'User data get successfully.');
+        }
     }
 }
