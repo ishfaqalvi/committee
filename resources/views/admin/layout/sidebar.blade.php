@@ -61,6 +61,14 @@
     </a>
 </li>
 @endcan
+@can('appStrings-list')
+<li class="nav-item">
+    <a class="nav-link {{ request()->routeIs('app-strings*') ? 'active' : ''}}" href="{{ route('app-strings.index') }}">
+        <i class="ph-star"></i>
+        <span>App String</span>
+    </a>
+</li>
+@endcan
 @canany(['committeeTypes-list'])
 <li class="nav-item-header">
     <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">Catalogs</div>
