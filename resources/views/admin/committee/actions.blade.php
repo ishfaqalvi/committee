@@ -1,40 +1,33 @@
 @canany(['committees-view', 'committees-edit', 'committees-delete'])
 <div class="d-inline-flex">
-    <div class="dropdown">
-        <a href="#" class="text-body" data-bs-toggle="dropdown">
-            <i class="ph-list"></i>
+    @can('committees-view')
+        <a href="{{ route('committees.show',$committee->id) }}" class="text-teal" data-bs-popup="tooltip" title="Show">
+            <i class="ph-eye"></i>
         </a>
-        <div class="dropdown-menu dropdown-menu-end">
-            @if($committee->status == 'Pending')
-                <form action="{{ route('committees.update',$committee->id) }}" method="POST">
-                    @csrf
-                    {{ method_field('PATCH') }}
-                    <input type="hidden" name="status" value="Active">
-                    <button type="submit" class="dropdown-item sa-publish">
-                        <i class="ph-fast-forward-circle me-2"></i>{{ __('Publish') }}
-                    </button>
-                </form>
-            @endif
-            @can('committees-view')
-                <a href="{{ route('committees.show',$committee->id) }}" class="dropdown-item">
-                    <i class="ph-eye me-2"></i>{{ __('Show') }}
-                </a>
-            @endcan
-            @if($committee->status == 'Pending' && auth()->user()->can('committees-edit'))
-                <a href="{{ route('committees.edit',$committee->id) }}" class="dropdown-item">
-                    <i class="ph-note-pencil me-2"></i>{{ __('Edit') }}
-                </a>
-            @endif
-            @if($committee->status == 'Pending' && auth()->user()->can('committees-delete'))
-                <form action="{{ route('committees.destroy',$committee->id) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                    <button type="submit" class="dropdown-item sa-confirm">
-                        <i class="ph-trash me-2"></i>{{ __('Delete') }}
-                    </button>
-                </form>
-            @endif
-        </div>
-    </div>
+    @endcan
+    @if($committee->status == 'Pending')
+        <form action="{{ route('committees.update',$committee->id) }}" method="POST">
+            @csrf
+            {{ method_field('PATCH') }}
+            <input type="hidden" name="status" value="Active">
+            <a href="#" class="text-primary sa-publish" data-bs-popup="tooltip" title="Publish">
+                <i class="ph-fast-forward-circle"></i>
+            </button>
+        </form>
+    @endif
+    @if($committee->status == 'Pending' && auth()->user()->can('committees-edit'))
+        <a href="{{ route('committees.edit',$committee->id) }}" class="text-primary" data-bs-popup="tooltip" title="Edit">
+            <i class="ph-note-pencil"></i>
+        </a>
+    @endif
+    @if($committee->status == 'Pending' && auth()->user()->can('committees-delete'))
+        <form action="{{ route('committees.destroy',$committee->id) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <a href="#" class="text-danger sa-confirm" data-bs-popup="tooltip" title="Delete">
+                <i class="ph-trash"></i>
+            </a>
+        </form>
+    @endif
 </div>
 @endcanany

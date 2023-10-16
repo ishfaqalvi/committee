@@ -37,7 +37,7 @@ class MemberController extends Controller
     public function index()
     {
         $members = Member::createdByUser()->with('user','createdBy')->get();
-
+        
         return view('admin.member.index', compact('members'));
     }
 

@@ -50,7 +50,11 @@
             @foreach ($committees as $key => $committee)
                 <tr>
                     <td>{{ ++$key }}</td>
-					<td>{{ $committee->name }}</td>
+					<td>
+                        <a href="{{ route('committees.show',$committee->id) }}" data-bs-popup="tooltip" title="Show">
+                            {{ $committee->name }}               
+                        </a>
+                    </td>
 					<td>{{ $committee->committeeType->name }}</td>
                     <td>{{ $committee->committeeType->duration_days }}</td>
 					<td>{{ number_format($committee->amount) }}</td>

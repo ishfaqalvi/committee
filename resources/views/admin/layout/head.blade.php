@@ -27,12 +27,14 @@
 <script src="{{ asset('assets/demo/dropify/js/dropify.js') }}"></script>
 <script src="{{ asset('assets/js/vendor/pickers/daterangepicker.js') }}"></script>
 <script src="{{ asset('assets/js/vendor/pickers/datepicker.min.js') }}"></script>
+<script src="{{ asset('assets/js/vendor/ui/dragula.min.js') }}"></script>
 <!-- <script src="{{ asset('assets/js/vendor/visualization/d3/d3.min.js') }}"></script> -->
 <!-- <script src="{{ asset('assets/js/vendor/visualization/d3/d3_tooltip.js') }}"></script> -->
 
 <script src="{{ asset('assets/js/app.js') }}"></script>
 <script src="{{ asset('assets/demo/pages/datatables_basic.js') }}"></script>
 <script src="{{ asset('assets/demo/pages/form_select2.js') }}"></script>
+<script src="{{ asset('assets/demo/pages/extension_dnd.js') }}"></script>
 <script src="{{ asset('assets/demo/pages/dashboard.js') }}"></script>
 <!-- <script src="{{ asset('assets/demo/charts/pages/dashboard/streamgraph.js') }}"></script> -->
 <!-- <script src="{{ asset('assets/demo/charts/pages/dashboard/sparklines.js') }}"></script> -->

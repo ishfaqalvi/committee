@@ -84,6 +84,16 @@ class User extends Authenticatable implements Auditable
     }
 
     /**
+     * The get attributes.
+     *
+     * @var array
+     */
+    public function getMobileNumberAttribute($value)
+    {
+        return isset($value) ? $value :"Not defined";
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function createdBy()

@@ -57,7 +57,7 @@
 					<td>{{ $member->user->name }}</td>
 					<td>{{ $member->user->email }}</td>
 					<td>{{ $member->user->mobile_number }}</td>
-                    <td>{{ $member->user->createdBy->name }}</td>
+                    <td>{{ $member->user->createdBy?->name }}</td>
                     <td class="text-center">@include('admin.member.actions')</td>
                 </tr>
             @endforeach

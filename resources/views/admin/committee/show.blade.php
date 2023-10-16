@@ -25,65 +25,126 @@
 @endsection
 
 @section('content')
+<div class="d-lg-flex align-items-lg-start">
+    <div class="sidebar sidebar-component sidebar-expand-lg bg-transparent shadow-none me-lg-3">
+        <div class="sidebar-content">
+            <div class="card">
+                <div class="sidebar-section-body text-center">
+                    <div class="card-img-actions d-inline-block mb-3">
+                        <img class="img-fluid rounded-circle" src="{{ $committee->user->image }}" width="150" height="150" alt="">
+                    </div>
+                    <h6 class="mb-0">{{ $committee->user->name }}</h6>
+                    <span class="text-muted">{{ $committee->user->mobile_number }}</span>
+                </div>
+                <ul class="nav nav-sidebar">
+                    <li class="nav-item">
+                        <a href="#profile" class="nav-link active" data-bs-toggle="tab">
+                            <i class="ph-book-open me-2"></i>
+                            Committee Detail
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#members" class="nav-link" data-bs-toggle="tab">
+                            <i class="ph-users-three me-2"></i>
+                            Members
+                            <span class="badge bg-secondary rounded-pill ms-auto">
+                                {{ $committee->intervals()->count() }}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#payments" class="nav-link" data-bs-toggle="tab">
+                            <i class="ph-envelope me-2"></i>
+                            Payments
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#interval" class="nav-link" data-bs-toggle="tab">
+                            <i class="ph-sign-out me-2"></i>
+                            Interval
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="tab-content flex-fill">
+        <div class="tab-pane fade active show" id="profile">
+            <div class="card">
+                <div class="card-header d-sm-flex">
+                    <h5 class="mb-0">Committee Detail</h5>
+                </div>
+                <div class="card-body">
+                    @include('admin.committee.include.profile')
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="members">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Members</h5>
+                </div>
+                <div class="card-body">
+                    @include('admin.committee.include.members')
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="payments">
+            <div class="card">
+                <div class="card-header d-flex">
+                    <h5 class="mb-0">Payments</h5>
+                </div>
+                <div class="card-body d-flex align-items-start flex-wrap border-bottom">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="interval">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Interval</h5>
+                </div>
+                <div class="table-responsive">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div class="col-md-12">
     @can('intervals-create')
         @include('admin.interval.create')
     @endcan
     <div class="card">
         <div class="card-body">
-            <div class="d-lg-flex align-items-lg-center mb-4">
-                <a href="#" class="d-block me-lg-3 mb-3 mb-lg-0">
-                    <img src="{{ $committee->user->image }}" class="rounded" width="44" height="44" alt="">
-                </a>
-                <div class="flex-fill">
-                    <h5 class="mb-0">{{ $committee->user->name }}</h5>
-                    <ul class="list-inline list-inline-bullet text-muted mb-0">
-                        <li class="list-inline-item">{{ $committee->user->mobile_number }}</li>
-                        <li class="list-inline-item">{{ $committee->user->email }}</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="mb-4">
-                <h6>{{ $committee->name }}</h6>
-                <p>{{ $committee->description }}</p>
-                <div class="row px-3">
-                    <div class="col-lg-6">
-                        <dl>
-                            <dt class="fs-sm text-primary text-uppercase mb-2">
-                                1. Manager
-                            </dt>
-                            <dd class="mb-3">{{ $committee->user->name }}</dd>
-                            <dt class="fs-sm text-primary text-uppercase mb-2">
-                                3. Committee Type</dt>
-                            <dd class="mb-3">{{ $committee->committeeType->name }}</dd>
-                            <dt class="fs-sm text-primary text-uppercase mb-2">
-                                5. Per Committee Duration</dt>
-                            <dd class="mb-3">{{ $committee->committeeType->duration_days }} Days</dd>
-                            <dt class="fs-sm text-primary text-uppercase mb-2">
-                                7. Collection Days</dt>
-                            <dd class="mb-3">{{ $committee->collection_days }} Days</dd>
-                        </dl>
-                    </div>
-                    <div class="col-lg-6">
-                        <dl>
-                            <dt class="fs-sm text-primary text-uppercase mb-2">
-                                2. Amount
-                            </dt>
-                            <dd class="mb-3">{{ number_format($committee->amount) }}</dd>
-                            <dt class="fs-sm text-primary text-uppercase mb-2">
-                                4. Start Date</dt>
-                            <dd class="mb-3">{{ date('Y-m-d', $committee->start_date) }}</dd>
-                            <dt class="fs-sm text-primary text-uppercase mb-2">
-                                6. End Date</dt>
-                            <dd class="mb-3">
-                                {{ $committee->end_date ?? "Not defined" }}
-                            <dt class="fs-sm text-primary text-uppercase mb-2">
-                                8. Status</dt>
-                            <dd class="mb-3">{{ $committee->status }}</dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
+            
             @can('intervals-list')
             <div class="row">
                 @include('admin.interval.index')    

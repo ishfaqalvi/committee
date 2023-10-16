@@ -31,7 +31,7 @@ const DragAndDrop = function() {
         dragula([document.getElementById('forms-target-left'), document.getElementById('forms-target-right')]);
 
         // Draggable media lists
-        dragula([document.getElementById('media-list-target-left'), document.getElementById('media-list-target-right')], {
+        dragula([document.getElementById('media-list-target-left'), document.getElementById('members-list')], {
             mirrorContainer: document.querySelector('.media-list-container'),
             moves: function (el, container, handle) {
                 return handle.classList.contains('dragula-handle');
