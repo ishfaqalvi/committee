@@ -144,11 +144,19 @@ Route::controller(SettingController::class)->prefix('settings')->as('settings.')
 	Route::post('save', 		'save'		)->name('save'		 );
 });
 
+
+/*
+|--------------------------------------------------------------------------
+| App String Routes
+|--------------------------------------------------------------------------
+*/
+Route::resource('app-strings', AppStringController::class);
+
 /*
 |--------------------------------------------------------------------------
 | Error Log Route
 |--------------------------------------------------------------------------
 */
-Route::get('logs', 
+Route::get('logs',
 	[\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']
 )->name('logs');
