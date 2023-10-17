@@ -69,6 +69,7 @@ Route::controller(CommitteeController::class)->prefix('committees')->as('committ
 	Route::patch('update/{committee}',	'update'   )->name('update' 	);
 	Route::delete('delete/{id}',		'destroy'  )->name('destroy'	);
 	Route::post('check_days',			'checkDays')->name('checkDays'	);
+	Route::post('update-interval',		'updateInterval')->name('updateInterval'	);
 });
 
 /*

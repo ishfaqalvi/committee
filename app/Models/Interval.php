@@ -44,6 +44,17 @@ class Interval extends Model implements Auditable
     ];
 
     /**
+     * Boot method to increament in order.
+     */
+    protected static function booted()
+    {
+        static::creating(function ($interval) {
+            $highestOrder = static::max('order');
+            $interval->order = $highestOrder + 1;
+        });
+    }
+
+    /**
      * Scope model query.
      *
      * @var array
@@ -78,7 +89,7 @@ class Interval extends Model implements Auditable
     {
         return $this->hasOne('App\Models\Committee', 'id', 'committee_id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */

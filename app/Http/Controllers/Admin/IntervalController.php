@@ -38,14 +38,14 @@ class IntervalController extends Controller
         $committee = Committee::find($request->committee_id);
         $closed    = Interval::closed()->where('committee_id',$request->committee_id)->get();
         if (count($closed) >= 3) {
-            return redirect()->back()->with('warning', 'Oops! You can not add more members after 3 Intervals.');    
+            return redirect()->back()->with('warning', 'Oops! You can not add more members after 3 Intervals.');
         }
         if ($committee->status == 'Active') {
             $intervals = $committee->intervals()->whereIn('status', ['Active', 'Closed'])->get();
             foreach($intervals as $interval)
             {
                 $interval->payments()->create(['user_id' => $request->user_id]);
-            }    
+            }
         }
         $interval = Interval::create($request->all());
         return redirect()->back()->with('success', 'New Member added successfully.');

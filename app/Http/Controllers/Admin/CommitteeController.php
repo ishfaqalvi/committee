@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Committee;
 use App\Models\CommitteeType;
+use App\Models\Interval;
 use Illuminate\Http\Request;
 
 /**
@@ -28,7 +29,7 @@ class CommitteeController extends Controller
         $this->middleware('permission:committees-edit',  ['only' => ['edit','update']]);
         $this->middleware('permission:committees-delete',['only' => ['destroy']]);
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -153,5 +154,24 @@ class CommitteeController extends Controller
 
         return redirect()->route('committees.index')
             ->with('success', 'Committee deleted successfully');
+    }
+
+    /**
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
+    public function updateInterval(Request $request)
+    {
+        // dd($request->ids);
+        foreach($request->ids as $k => $id){
+            Interval::find($id)->update([
+                'order' => $k,
+            ]);
+        }
+        // $committee = Committee::find($id)->delete();
+
+        return redirect()->back()
+            ->with('success', 'Updated successfully');
     }
 }
