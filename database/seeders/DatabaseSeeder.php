@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MemberSeeder::class);
         $this->call(CommitteeTypeSeeder::class);
         $this->call(CommitteeSeeder::class);
-        $this->call(IntervalSeeder::class);
         $this->call(SettingsSeeder::class);
     }
 }

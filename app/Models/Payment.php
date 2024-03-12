@@ -9,8 +9,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * Class Payment
  *
  * @property $id
- * @property $interval_id
- * @property $user_id
+ * @property $submission_id
  * @property $date
  * @property $remarks
  * @property $attachment
@@ -18,8 +17,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property $created_at
  * @property $updated_at
  *
- * @property Interval $interval
- * @property User $user
+ * @property Submission $submission
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
@@ -32,16 +30,7 @@ class Payment extends Model implements Auditable
      *
      * @var array
      */
-    protected $fillable = [
-        'interval_id',
-        'user_id',
-        'date',
-        'remarks',
-        'attachment',
-        'tags',
-        'approval',
-        'status'
-    ];
+    protected $fillable = ['submission_id','amount','date','remarks','attachment','status'];
 
     /**
      * Interact with the duration days.
@@ -78,32 +67,10 @@ class Payment extends Model implements Auditable
     }
 
     /**
-     * Scope model query.
-     *
-     * @var array
-     */
-    public function scopeUserWise($query)
-    {
-        $user = auth()->user();
-        if ($user->id != 1) {
-            $query->where('user_id', $user->id);
-        }
-        return $query;
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function interval()
+    public function submission()
     {
-        return $this->hasOne('App\Models\Interval', 'id', 'interval_id');
-    }
-    
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function user()
-    {
-        return $this->hasOne('App\Models\User', 'id', 'user_id');
+        return $this->hasOne('App\Models\Submission', 'id', 'submission_id');
     }
 }

@@ -16,49 +16,71 @@
 
 @section('content')
 <div class="col-sm-12">
+    @foreach($committees as $committee)
     <div class="card">
         <div class="card-header">
-            <h5 class="mb-0">Payment</h5>
+            <h5 class="mb-0">{{ $committee->name }} Payments</h5>
         </div>
-        <table class="table datatable-basic">
-            <thead class="thead">
+        <table class="table text-nowrap">
+            <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Committee</th>
+                    <th>Attachment</th>
+                    <th>Date</th>
                     <th>Amount</th>
-					<th>Member</th>
-					<th>Date</th>
-                    <th>Approval</th>
-					<th>Status</th>
-                    <th class="text-center">Actions</th>
+                    <th>Remarks</th>
+                    <th>Status</th>
+                    <th class="text-center"><i class="ph-dots-three"></i></th>
                 </tr>
             </thead>
             <tbody>
-            @foreach ($payments as $key => $payment)
+                @foreach(getCurrentUserSubmissionsForCommittee($committee->id) as $submission)
+                <tr class="table-light">
+                    <td colspan="5" class="fw-semibold">
+                        {{ $submission->committeeMember->user->name }}
+                        <span class="badge bg-secondary rounded-pill">
+                            {{ $submission->status }}
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        @can('payments-create')
+                        <a href="#" class="text-body addRecord" data-submission="{{ $submission->id }}">
+                            <i class="ph-plus me-1"></i>
+                            Add Payment
+                        </a>
+                        @endcan
+                    </td>
+                </tr>
+                @foreach($submission->payments as $payment)
                 <tr>
-                    <td>{{ ++$key }}</td>
-					<td>{{ $payment->interval->committee->name }}</td>
-                    <td>{{ number_format($payment->interval->committee->amount) }}</td>
-					<td>{{ $payment->user->name }}</td>
-					<td>@if(!empty($payment->date)){{ date('Y-m-d', $payment->date) }} @endif</td>
-					<td>{{ $payment->approval }}</td>
-					<td>
-                        {{ $payment->status }}
-                        @php($tag = $payment->tags)
-                        @if(!empty($tag) && $tag == 'Late')
-                            <span class="badge bg-warning rounded-pill">{{ $tag }}</span>
-                        @endif 
-                        @if(!empty($tag) && $tag == 'On Time')
-                            <span class="badge bg-success rounded-pill">{{ $tag }}</span>
+                    <td class="pe-0">
+                        <a href="#">
+                            <img src="{{ $payment->attachment}}" height="60" alt="">
+                        </a>
+                    </td>
+                    <td>{{ date('d M Y',$payment->date) }}</td>
+                    <td>{{ number_format($payment->amount) }}</td>
+                    <td>{{ Str::limit($payment->remarks, 60) }}</td>
+                    <td>{{ $payment->status }}</td>
+                    <td class="text-center">
+                        @if($payment->status == 'Pending' && auth()->user()->can('payments-delete'))
+                            <form action="{{ route('payments.destroy',$payment->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <a href="#" class="text-danger sa-confirm" data-bs-popup="tooltip" title="Delete">
+                                    <i class="ph-trash"></i>
+                                </a>
+                            </form>
                         @endif
                     </td>
-                    <td class="text-center">@include('admin.payment.actions')</td>
                 </tr>
-            @endforeach
+                @endforeach
+                @endforeach
             </tbody>
         </table>
     </div>
+    @endforeach
 </div>
+@include('admin.payment.create')
 @endsection
 @section('script')
 <script>
@@ -89,6 +111,35 @@
             }).then((result) => {
                 if (result.value === true)  $(this).closest("form").submit();
             });
+        });
+        $('.validate').validate({
+            errorClass: 'validation-invalid-label',
+            successClass: 'validation-valid-label',
+            validClass: 'validation-valid-label',
+            highlight: function(element, errorClass) {
+                $(element).removeClass(errorClass);
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element, errorClass) {
+                $(element).removeClass(errorClass);
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+            },
+            errorPlacement: function(error, element) {
+                if (element.hasClass('select2-hidden-accessible')) {
+                    error.appendTo(element.parent());
+                }else if (element.parents().hasClass('form-control-feedback') || element.parents().hasClass('form-check') || element.parents().hasClass('input-group')) {
+                    error.appendTo(element.parent().parent());
+                }else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+        $('.addRecord').on('click', function(e) {
+            e.preventDefault();
+            $('#submission_id').val($(this).data('submission'));
+            $('#addRecord').modal('show');
         });
     });
 </script>

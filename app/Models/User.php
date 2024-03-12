@@ -100,4 +100,12 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasOne('App\Models\User', 'id', 'created_by');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function members()
+    {
+        return $this->hasMany('App\Models\Member', 'user_id', 'id');
+    }
 }

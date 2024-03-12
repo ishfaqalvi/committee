@@ -72,7 +72,7 @@
     <div class="p-3">
         <div class="d-flex align-items-start mb-3">
             <a href="#" class="status-indicator-container me-3">
-                <img src="{{ asset('assets/images/demo/users/face25.jpg" class="w-40px h-40px rounded-pill" alt="">
+                <img src="{{ asset('assets/images/demo/users/face25.jpg') }}" class="w-40px h-40px rounded-pill" alt="">
                 <span class="status-indicator bg-success"></span>
             </a>
             <div class="flex-fill">
@@ -91,7 +91,7 @@
         </div>
         <div class="d-flex align-items-start mb-3">
             <a href="#" class="status-indicator-container me-3">
-                <img src="{{ asset('assets/images/demo/users/face24.jpg" class="w-40px h-40px rounded-pill" alt="">
+                <img src="{{ asset('assets/images/demo/users/face24.jpg') }}" class="w-40px h-40px rounded-pill" alt="">
                 <span class="status-indicator bg-grey"></span>
             </a>
             <div class="flex-fill">
@@ -134,7 +134,7 @@
         </div>
         <div class="d-flex align-items-start mb-3">
             <a href="#" class="status-indicator-container me-3">
-                <img src="{{ asset('assets/images/demo/users/face4.jpg" class="w-40px h-40px rounded-pill" alt="">
+                <img src="{{ asset('assets/images/demo/users/face4.jpg') }}" class="w-40px h-40px rounded-pill" alt="">
                 <span class="status-indicator bg-danger"></span>
             </a>
             <div class="flex-fill">

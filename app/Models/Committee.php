@@ -61,13 +61,11 @@ class Committee extends Model implements Auditable
     public function scopeUserRoleWise($query)
     {
         $user = auth()->user();
-        if ($user->hasRole(2)) {
-            $query->where('created_by', $user->id);
-        }
-        elseif($user->hasRole(3)){
-            $query->whereHas('intervals', function ($q) use ($user) {
-                $q->where('user_id', $user->id);
-            });
+        if ($user->id != 1) {
+            $query->where('created_by', $user->id)
+                ->orWhereHas('members', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                });
         }
         return $query;
     }
@@ -91,8 +89,8 @@ class Committee extends Model implements Auditable
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function intervals()
+    public function members()
     {
-        return $this->hasMany('App\Models\Interval', 'committee_id', 'id');
+        return $this->hasMany('App\Models\CommitteeMember', 'committee_id', 'id');
     }
 }

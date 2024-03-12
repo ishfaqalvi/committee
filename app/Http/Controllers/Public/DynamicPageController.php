@@ -5,7 +5,9 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\Committee;
+use App\Models\Interval;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DynamicPageController extends Controller
 {
@@ -20,32 +22,34 @@ class DynamicPageController extends Controller
         return view('public.index');
     }
 
-    public function cronJob()
+    public function startIntervals()
     {
-        foreach (Committee::where('status', 'Active')->get() as $committee) {
-            
-            // if ($active = $committee->intervals()->active()->first()) {
-            //     // code...
-            // }
-            $start_date = $committee->start_date;
-            $close_date = addDays($start_date, $committee->collection_days);
-            $intervals  = $committee->intervals()->closed()->count();
-            if ($intervals > 0) {
-                $start_date = addDays($start_date, $committee->committeeType->duration_days * $intervals);
-                $close_date   = addDays($start_date, $committee->collection_days);
-            }
-            if ($start_date == strtotime(date('Y-m-d'))) {
-                $interval = $committee->intervals()->pending()->first();
-                $interval->update([
-                    'start_date' => $start_date,
-                    'close_date' => $close_date,
-                    'status'     => 'Active'
-                ]);
-                foreach ($committee->intervals()->pluck('user_id') as $id) {
-                    $interval->payments()->create(['user_id' => $id]);  
+        $todayTimestamp = now()->startOfDay()->timestamp;
+        $committees = Committee::where('start_date', '<=', $todayTimestamp)->get();
+        DB::transaction(function () use ($committees) {
+            foreach ($committees as $committee) {
+                $pendingMember = $committee->members()->where('status', 'Pending')->orderBy('order', 'asc')->first();
+                if ($pendingMember) {
+                    $committee->members()->where('status', 'Active')->update(['status' => 'Closed']);
+
+                    $pendingMember->status = 'Active';
+                    $pendingMember->save();
+
+                    foreach ($pendingMember->committee->members()->pluck('user_id') as $id) {
+                        $pendingMember->submissions()->create(['user_id' => $id]);  
+                    }
                 }
             }
+        });
+        return 'Intervals start Successfully.';
+    }
+
+    public function closeIntervals()
+    {
+        $ids = Committee::where('status', 'Active')->pluck('id');
+        foreach (Interval::whereIn('committee_id',$ids)->closeToday()->get() as $interval) {
+            $interval->update(['status' => 'Closed']);
         }
-        return 'Cron Job run Successfully.';
+        return 'Intervals closed Successfully.';
     }
 }

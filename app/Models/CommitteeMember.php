@@ -6,26 +6,34 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * Class Interval
+ * Class CommitteeMember
  *
  * @property $id
  * @property $committee_id
  * @property $user_id
+ * @property $start_date
+ * @property $close_date
+ * @property $due_date
  * @property $order
- * @property $ammount
+ * @property $payable
+ * @property $receivable
  * @property $status
  * @property $created_at
  * @property $updated_at
  *
  * @property Committee $committee
+ * @property Submission[] $submissions
  * @property User $user
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class Interval extends Model implements Auditable
+class CommitteeMember extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
+    
+
+    protected $perPage = 20;
 
     /**
      * Attributes that should be mass-assignable.
@@ -37,9 +45,11 @@ class Interval extends Model implements Auditable
         'user_id',
         'start_date',
         'close_date',
+        'due_date',
         'order',
         'payable',
         'receivable',
+        'role',
         'status'
     ];
 
@@ -48,38 +58,10 @@ class Interval extends Model implements Auditable
      */
     protected static function booted()
     {
-        static::creating(function ($interval) {
+        static::creating(function ($model) {
             $highestOrder = static::max('order');
-            $interval->order = $highestOrder + 1;
+            $model->order = $highestOrder + 1;
         });
-    }
-
-    /**
-     * Scope model query.
-     *
-     * @var array
-     */
-    public function scopePending($query)
-    {
-        return $query->where('status','Pending');
-    }/**
-     * Scope model query.
-     *
-     * @var array
-     */
-    public function scopeActive($query)
-    {
-        return $query->where('status','Active');
-    }
-
-    /**
-     * Scope model query.
-     *
-     * @var array
-     */
-    public function scopeClosed($query)
-    {
-        return $query->where('status','Closed');
     }
 
     /**
@@ -89,7 +71,7 @@ class Interval extends Model implements Auditable
     {
         return $this->hasOne('App\Models\Committee', 'id', 'committee_id');
     }
-
+    
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
@@ -97,12 +79,12 @@ class Interval extends Model implements Auditable
     {
         return $this->hasOne('App\Models\User', 'id', 'user_id');
     }
-
+    
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function payments()
+    public function submissions()
     {
-        return $this->hasMany('App\Models\Payment', 'interval_id', 'id');
+        return $this->hasMany('App\Models\Submission', 'committee_member_id', 'id');
     }
 }

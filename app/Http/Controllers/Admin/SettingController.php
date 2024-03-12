@@ -18,8 +18,8 @@ class SettingController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:tool-list',  ['only' => ['index']]);
-        $this->middleware('permission:tool-create',['only' => ['create','save']]);
+        $this->middleware('permission:settings-list',  ['only' => ['index']]);
+        $this->middleware('permission:settings-create',['only' => ['create','save']]);
     }
 
     /**
@@ -68,7 +68,7 @@ class SettingController extends Controller
                 $filenamewithextension = $image->getClientOriginalName();
                 $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
                 $filenametostore = 'upload/images/settings/'.$filename.'_'.time().'.webp';
-                // $img = Image::make($image)->encode('webp', 90)->resize(100 , 200)->save(public_path($filenametostore));
+                // $img = Image::make($image)->encode('webp', 90)->resize(100 , 200)->save(public_path($filenametostore)); 
                 $img = Image::make($image)->encode('webp', 90)->save(public_path($filenametostore));
             }
             $data[] = array(

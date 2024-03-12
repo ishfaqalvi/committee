@@ -28,18 +28,24 @@ class RoleSeeder extends Seeder
             'committees-view', 
             'committees-create', 
             'committees-edit', 
+            'committees-publish',
             'committees-delete',
 
-            'intervals-list', 
-            'intervals-view', 
-            'intervals-create', 
-            'intervals-edit', 
-            'intervals-delete',
+            'committeeMembers-list',
+            'committeeMembers-create',
+            'committeeMembers-edit',
+            'committeeMembers-delete',
 
-            'payments-list', 
-            'payments-view', 
-            'payments-create', 
-            'payments-edit', 
+            'committeeSubmission-list',
+            'committeeSubmission-reminder',
+            'committeeSubmission-received',
+
+            'committeePayment-list',
+            'committeePayment-approve',
+            'committeePayment-reject',
+
+            'payments-list',
+            'payments-create',
             'payments-delete',
         ];
         $managerRole = Role::create(['name' => 'Manager',   'guard_name' => 'web']);
@@ -50,11 +56,15 @@ class RoleSeeder extends Seeder
         [
             'committees-list', 
             'committees-view',
-            
-            'payments-list', 
-            'payments-view', 
-            'payments-create', 
-            'payments-edit', 
+
+            'committeeMembers-list',
+
+            'committeeSubmission-list',
+
+            'committeePayment-list',
+
+            'payments-list',
+            'payments-create',
             'payments-delete',
         ];
         $memberRole = Role::create(['name' => 'Member',    'guard_name' => 'web']);

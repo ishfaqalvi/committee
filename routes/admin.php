@@ -60,42 +60,26 @@ Route::controller(MemberController::class)->prefix('members')->as('members.')->g
 | Committee Routes
 |--------------------------------------------------------------------------
 */
-Route::controller(CommitteeController::class)->prefix('committees')->as('committees.')->group(function () {
-	Route::get('list',					'index'	   )->name('index'  	);
-	Route::get('create',				'create'   )->name('create' 	);
-	Route::post('store',				'store'	   )->name('store'  	);
-	Route::get('edit/{id}',				'edit'	   )->name('edit'	  	);
-	Route::get('show/{id}',				'show'	   )->name('show'	  	);
-	Route::patch('update/{committee}',	'update'   )->name('update' 	);
-	Route::delete('delete/{id}',		'destroy'  )->name('destroy'	);
-	Route::post('check_days',			'checkDays')->name('checkDays'	);
-	Route::post('update-interval',		'updateInterval')->name('updateInterval'	);
-});
+Route::prefix('/committees')->namespace('\App\Http\Controllers\Admin\Committee')->group(__DIR__.'/committee.php');
 
 /*
 |--------------------------------------------------------------------------
-| Intervals Routes
-|--------------------------------------------------------------------------
-*/
-Route::controller(IntervalController::class)->prefix('intervals')->as('intervals.')->group(function () {
-	Route::post('store',				'store'	   	)->name('store'  	);
-	Route::patch('update/{interval}',	'update'   	)->name('update' 	);
-	Route::delete('delete/{id}',		'destroy'  	)->name('destroy'	);
-	Route::post('check_order',			'checkOrder')->name('checkOrder');
-});
-
-/*
-|--------------------------------------------------------------------------
-| Payments Routes
+| Committee Routes
 |--------------------------------------------------------------------------
 */
 Route::controller(PaymentController::class)->prefix('payments')->as('payments.')->group(function () {
-	Route::get('list',					'index'	   )->name('index'  	);
-	Route::patch('submit/{payment}',	'submit'   )->name('submit'		);
-	Route::patch('approve/{payment}',	'approve'  )->name('approve'	);
-	Route::get('edit/{id}',				'edit'	   )->name('edit'	  	);
-	Route::get('show/{id}',				'show'	   )->name('show'	  	);
-	Route::patch('update/{payment}',	'update'   )->name('update' 	);
+	Route::get('list',				'index'		 )->name('index'	  );
+	Route::get('create',			'create'	 )->name('create'	  );
+	Route::get('search',			'search'	 )->name('search'	  );
+	Route::post('store',			'store'		 )->name('store'	  );
+	Route::post('add',				'add'		 )->name('add'	  	  );
+	Route::get('edit/{id}',			'edit'		 )->name('edit'		  );
+	Route::get('show/{id}',			'show'		 )->name('show'		  );
+	Route::patch('update/{user}',	'update'	 )->name('update'	  );
+	Route::delete('delete/{id}',	'destroy'	 )->name('destroy'	  );
+    Route::post('check_email', 	 	'checkEmail' )->name('checkEmail' );
+    Route::post('check_phone',		'checkPhone' )->name('checkPhone' );
+    Route::post('check_member',		'checkMember')->name('checkMember');
 });
 
 /*

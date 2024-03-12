@@ -58,9 +58,6 @@
                 $(element).removeClass('is-invalid');
                 $(element).addClass('is-valid');
             },
-            success: function(label) {
-                label.addClass('validation-valid-label').text('Success.');
-            },
             errorPlacement: function(error, element) {
                 if (element.hasClass('select2-hidden-accessible')) {
                     error.appendTo(element.parent());

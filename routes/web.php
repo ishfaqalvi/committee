@@ -28,4 +28,5 @@ Auth::routes();
 */
 Route::get('/', [DynamicPageController::class, 'viewHomePage']);
 
-Route::get('cron-jobs', [DynamicPageController::class, 'cronJob']);
+Route::get('start-interval', [DynamicPageController::class, 'startIntervals']);
+Route::get('close-interval', [DynamicPageController::class, 'closeIntervals']);

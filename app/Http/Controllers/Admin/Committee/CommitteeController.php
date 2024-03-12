@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Committee;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\Member;
 use App\Models\Committee;
 use App\Models\CommitteeType;
 use App\Models\Interval;
@@ -23,11 +24,12 @@ class CommitteeController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:committees-list',  ['only' => ['index']]);
-        $this->middleware('permission:committees-view',  ['only' => ['show']]);
-        $this->middleware('permission:committees-create',['only' => ['create','store']]);
-        $this->middleware('permission:committees-edit',  ['only' => ['edit','update']]);
-        $this->middleware('permission:committees-delete',['only' => ['destroy']]);
+        $this->middleware('permission:committees-list',   ['only' => ['index']]);
+        $this->middleware('permission:committees-view',   ['only' => ['show']]);
+        $this->middleware('permission:committees-create', ['only' => ['create','store']]);
+        $this->middleware('permission:committees-edit',   ['only' => ['edit','update']]);
+        $this->middleware('permission:committees-publish',['only' => ['publish']]);
+        $this->middleware('permission:committees-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -64,11 +66,11 @@ class CommitteeController extends Controller
     {
         DB::transaction(function () use ($request) {
             $committee = Committee::create($request->all());
-            $intervals = [
-                ['user_id' => 2,                    'order' => 1],
-                ['user_id' => $request->created_by, 'order' => 2]
+            $members = [
+                ['user_id'=>2,                   'order' => 1, 'role'=>'Application'],
+                ['user_id'=>$request->created_by,'order' => 2, 'role'=>'Manager']
             ];
-            $committee->intervals()->createMany($intervals);
+            $committee->members()->createMany($members);
         });
 
         return redirect()->route('committees.index')
@@ -84,9 +86,8 @@ class CommitteeController extends Controller
     public function show($id)
     {
         $committee = Committee::find($id);
-        $users = User::whereHas('roles', function($q){$q->whereIn('name', ['Manager','Member']);})->pluck('mobile_number','id');
 
-        return view('admin.committee.show', compact('committee','users'));
+        return view('admin.committee.include.show.index', compact('committee'));
     }
 
     /**
@@ -119,6 +120,34 @@ class CommitteeController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  Committee $committee
+     * @return \Illuminate\Http\Response
+     */
+    public function publish(Request $request, Committee $committee)
+    {
+        $committee->update($request->all());
+        $startDate = $committee->start_date;
+        $endDate = addDays($startDate, $committee->committeeType->duration_days);
+        $dueDate = addDays($startDate, $committee->collection_days);
+        foreach($committee->members()->orderBy('order')->get() as $member)
+        {
+            $member->update([
+                'start_date'=> $startDate,
+                'close_date'=> $endDate,
+                'due_date'  => $dueDate
+            ]);
+            $startDate= $member->close_date + 86400;
+            $dueDate  = addDays($startDate, $committee->collection_days);
+            $endDate  = addDays($startDate, $committee->committeeType->duration_days);
+        }
+
+        return redirect()->back()->with('success', 'Committee publish successfully.');
+    }
+
+    /**
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
@@ -140,38 +169,5 @@ class CommitteeController extends Controller
     {
         $type = CommitteeType::find($request->id);
         if($request->days > $type->duration_days) { echo "false"; }else{ echo "true";}
-    }
-
-    /**
-     * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
-     */
-    public function actions(Request $request)
-    {
-        dd($request->all());
-        $committee = Committee::find($id)->delete();
-
-        return redirect()->route('committees.index')
-            ->with('success', 'Committee deleted successfully');
-    }
-
-    /**
-     * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
-     */
-    public function updateInterval(Request $request)
-    {
-        // dd($request->ids);
-        foreach($request->ids as $k => $id){
-            Interval::find($id)->update([
-                'order' => $k,
-            ]);
-        }
-        // $committee = Committee::find($id)->delete();
-
-        return redirect()->back()
-            ->with('success', 'Updated successfully');
     }
 }

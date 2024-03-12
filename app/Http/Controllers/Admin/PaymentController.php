@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
-use App\Models\Payment;
+use App\Models\{Committee,Submission,Payment};
 use Illuminate\Http\Request;
 use DB;
 
@@ -21,9 +21,7 @@ class PaymentController extends Controller
     function __construct()
     {
         $this->middleware('permission:payments-list',  ['only' => ['index']]);
-        $this->middleware('permission:payments-view',  ['only' => ['show']]);
-        $this->middleware('permission:payments-create',['only' => ['create','store']]);
-        $this->middleware('permission:payments-edit',  ['only' => ['edit','update']]);
+        $this->middleware('permission:payments-create',['only' => ['store']]);
         $this->middleware('permission:payments-delete',['only' => ['destroy']]);
     }
 
@@ -34,50 +32,25 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payment::userWise()->get();
+        $userId = auth()->id();
+        $committees = Committee::whereHas('members', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->whereStatus('Active')->get();
 
-        return view('admin.payment.index', compact('payments'));
+        return view('admin.payment.index', compact('committees'));
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $payment = Payment::find($id);
-
-        return view('admin.payment.show', compact('payment'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $payment = Payment::find($id);
-
-        return view('admin.payment.edit', compact('payment'));
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  Payment $payment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Payment $payment)
+    public function store(Request $request)
     {
-        $payment->update($request->all());
-
+       $payment = Payment::create($request->all());
         return redirect()->route('payments.index')
-            ->with('success', 'Payment updated successfully');
+            ->with('success', 'Payment created successfully.');
     }
 
     /**

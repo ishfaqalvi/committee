@@ -15,14 +15,12 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('interval_id')->constrained('intervals');
-            $table->foreignId('user_id')->constrained('users');
-            $table->bigInteger('date')->nullable();
+            $table->foreignId('submission_id')->constrained('submissions');
+            $table->bigInteger('amount');
+            $table->bigInteger('date');
             $table->string('remarks')->nullable();
-            $table->string('attachment')->nullable();
-            $table->string('tags')->nullable();
-            $table->enum('approval',['Approved','Not Approved'])->nullable();
-            $table->enum('status',['Pending','Submitted'])->default('Pending');
+            $table->string('attachment');
+            $table->enum('status',['Pending','Approved','Not Approved'])->default('Pending');
             $table->timestamps();
         });
     }

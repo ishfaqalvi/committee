@@ -2,7 +2,7 @@
 
 
 use Carbon\Carbon;
-use App\Models\Setting;
+use App\Models\{Setting,Submission};
 use Spatie\Image\Image;
 use Spatie\Image\Manipulations;
 use Spatie\Permission\Models\Role;
@@ -90,4 +90,20 @@ function addIntervalPayments($interval)
         'start_date' => date('Y-m-d'), 
         'close_date' => Carbon::now()->addDays($committee->collection_days)
     ]);
+}
+
+/**
+ * Get listing of a resource.
+ *
+ * @return \Illuminate\Http\Response
+ */
+function getCurrentUserSubmissionsForCommittee($committeeId)
+{
+    $userId = auth()->id();
+    $submissions = Submission::whereHas('committeeMember', function ($query) use ($committeeId) {
+        $query->whereHas('committee', function ($query) use ($committeeId) {
+            $query->where('id', $committeeId);
+        });
+    })->where('user_id', $userId)->get();
+    return $submissions;
 }

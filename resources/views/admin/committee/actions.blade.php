@@ -5,14 +5,14 @@
             <i class="ph-eye"></i>
         </a>
     @endcan
-    @if($committee->status == 'Pending')
-        <form action="{{ route('committees.update',$committee->id) }}" method="POST">
+    @if($committee->status == 'Pending' && auth()->user()->can('committees-publish'))
+        <form action="{{ route('committees.publish',$committee->id) }}" method="POST">
             @csrf
             {{ method_field('PATCH') }}
             <input type="hidden" name="status" value="Active">
             <a href="#" class="text-primary sa-publish" data-bs-popup="tooltip" title="Publish">
                 <i class="ph-fast-forward-circle"></i>
-            </button>
+            </a>
         </form>
     @endif
     @if($committee->status == 'Pending' && auth()->user()->can('committees-edit'))

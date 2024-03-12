@@ -13,15 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('intervals', function (Blueprint $table) {
+        Schema::create('committee_members', function (Blueprint $table) {
             $table->id();
             $table->foreignId('committee_id')->constrained('committees');
             $table->foreignId('user_id')->constrained('users');
             $table->bigInteger('start_date')->nullable();
             $table->bigInteger('close_date')->nullable();
+            $table->bigInteger('due_date')->nullable();
             $table->integer('order')->default(1);
             $table->integer('payable')->default(0);
             $table->integer('receivable')->default(0);
+            $table->enum('role',['Application','Manager','Member'])->default('Member');
             $table->enum('status',['Pending','Active','Closed'])->default('Pending');
             $table->timestamps();
         });
@@ -34,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('intervals');
+        Schema::dropIfExists('committee_members');
     }
 };
