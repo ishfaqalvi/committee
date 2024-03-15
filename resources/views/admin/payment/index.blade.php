@@ -59,7 +59,7 @@
                     </td>
                     <td>{{ date('d M Y',$payment->date) }}</td>
                     <td>{{ number_format($payment->amount) }}</td>
-                    <td>{{ Str::limit($payment->remarks, 60) }}</td>
+                    <td>{{ Str::limit($payment->remarks, 40) }}</td>
                     <td>{{ $payment->status }}</td>
                     <td class="text-center">
                         @if($payment->status == 'Pending' && auth()->user()->can('payments-delete'))

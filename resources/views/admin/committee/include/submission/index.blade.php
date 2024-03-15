@@ -58,6 +58,17 @@
                                 Close Date : <span class="fw-semibold">{{ date('d M Y',$member->close_date) }}</span>
                             </div>
                         </div>
+                        <div class="ms-3">
+                            @if($member->receivable == 0 && auth()->user()->id == $member->committee->created_by)
+                            <form action="{{ route('committees.members.submit',$member->id) }}" method="POST">
+                                @csrf
+                                {{ method_field('PATCH') }}
+                                <a href="#" class="btn btn-success btn-xs btn-icon sa-submitted" data-bs-popup="tooltip" title="Submit Committee">
+                                    <i class="ph-check-square"></i>
+                                </a>
+                            </form>
+                            @endif
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -147,6 +158,24 @@
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, received it!',
+                cancelButtonText: 'No, cancel!',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                }
+            }).then((result) => {
+                if (result.value === true)  $(this).closest("form").submit();
+            });
+        });
+        $(".sa-submitted").click(function (event) {
+            event.preventDefault();
+            swalInit.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, submit it!',
                 cancelButtonText: 'No, cancel!',
                 buttonsStyling: false,
                 customClass: {

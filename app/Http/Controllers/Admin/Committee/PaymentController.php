@@ -50,6 +50,8 @@ class PaymentController extends Controller
     public function update(Request $request, Payment $payment)
     {
         $payment->update($request->all());
+        $member = $payment->submission->committeeMember;
+        $member->increment('payable',$payment->amount);
 
         return redirect()->back()->with('success', 'Payment updated successfully.');
     }

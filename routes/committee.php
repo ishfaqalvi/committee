@@ -30,11 +30,12 @@ Route::group([
     'as'         => 'committees.members.',
     'controller' => MemberController::class
 ], function () {
-    Route::get('list/{id}',         'index'  )->name('index'  	);
-	Route::get('search',			'search' )->name('search'	);
-    Route::post('store',			'store'	 )->name('store'  	);
-	Route::post('update',			'update' )->name('update' 	);
-	Route::delete('delete/{id}',	'destroy')->name('destroy'	);
+    Route::get('list/{id}',         	'index'  	 )->name('index'  	);
+	Route::get('search',				'search' 	 )->name('search'	);
+    Route::post('store',				'store'	 	 )->name('store'  	);
+	Route::post('update',				'update' 	 )->name('update' 	);
+	Route::patch('submission/{member}',	'submission' )->name('submit' 	);
+	Route::delete('delete/{id}',		'destroy'	 )->name('destroy'	);
 });
 
 /*
@@ -63,6 +64,20 @@ Route::group([
     'prefix'     => 'payments',
     'as'         => 'committees.payments.',
     'controller' => PaymentController::class
+], function () {
+    Route::get('list/{id}',           	'index'  	)->name('index'  	);
+	Route::patch('update/{payment}',	'update'   	)->name('update' 	);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Payments Routes
+|--------------------------------------------------------------------------
+*/
+Route::group([
+    'prefix'     => 'accounts',
+    'as'         => 'committees.accounts.',
+    'controller' => AccountController::class
 ], function () {
     Route::get('list/{id}',           	'index'  	)->name('index'  	);
 	Route::patch('update/{payment}',	'update'   	)->name('update' 	);

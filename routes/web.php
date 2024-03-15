@@ -29,4 +29,3 @@ Auth::routes();
 Route::get('/', [DynamicPageController::class, 'viewHomePage']);
 
 Route::get('start-interval', [DynamicPageController::class, 'startIntervals']);
-Route::get('close-interval', [DynamicPageController::class, 'closeIntervals']);

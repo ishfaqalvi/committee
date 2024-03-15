@@ -114,7 +114,7 @@
                         @endforeach
                     </ul>
                 </div>
-                @can(committeeMembers-edit)
+                @can('committeeMembers-edit')
                 <button type="submit" class="btn btn-info">Save Changes</button>
                 @endcan
             </form>

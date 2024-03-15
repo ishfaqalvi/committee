@@ -45,7 +45,12 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        CommitteeMember::create($request->all());
+        $member = CommitteeMember::create($request->all());
+        if ($member->committee->status == 'Active') {
+            foreach($member->committee->members()->where('status','!=','Pending')->get() as $row){
+                $row->submissions()->create(['user_id' => $member->id]);
+            }
+        }
         return redirect()->back()->with('success', 'Member added successfully.');
     }
 
@@ -62,6 +67,20 @@ class MemberController extends Controller
             CommitteeMember::find($id)->update(['order' => $k]);
         }
         return redirect()->back()->with('success', 'Member list updated successfully.');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  CommitteeMember $committeeMember
+     * @return \Illuminate\Http\Response
+     */
+    public function submission(Request $request, CommitteeMember $member)
+    {
+        $amount = $member->committee->amount * $member->committee->members()->count();
+        $member->update(['receivable' => $amount]);
+        return redirect()->back()->with('success', 'Committee submitted to member successfully.');
     }
 
     /**

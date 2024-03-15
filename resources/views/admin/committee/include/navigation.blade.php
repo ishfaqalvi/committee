@@ -29,4 +29,12 @@
         Payments
     </a>
     @endcan
+    @can('committeeMembers-list')
+    <a 
+        href="{{ route('committees.accounts.index',$committee->id)}}" 
+        class="d-flex align-items-center text-body p-2 {{ request()->routeIs('committees.accounts.index*') ? 'active' : ''}}">
+        <i class="ph-folder-user me-1"></i>
+        Accounts
+    </a>
+    @endcan
 </div>
