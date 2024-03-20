@@ -1,1 +1,1 @@
-# Integral-Calculator
+# Commetti Application
